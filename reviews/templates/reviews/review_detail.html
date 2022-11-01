@@ -21,9 +21,9 @@
       <a href="{% url 'reviews:review_delete' review.movie.pk review.pk %}">삭제</a>
     {% endif %}
   {% endif %}
-  <form action="{% url 'reviews:comment_create' review.pk %}" method="POST">
+  <form action="{% url 'reviews:comment_create' review.movie.pk review.pk %}" method="POST">
     {% csrf_token %}
-    {% bootstrap5_form comment_form %}
+    {% bootstrap_form comment_form %}
     <input type="submit">
   </form>
   <hr>

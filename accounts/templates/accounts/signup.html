@@ -2,9 +2,9 @@
 {% load django_bootstrap5 %}
 
 {% block content %}
-  <form action="{% url 'accounts:signup' %}">
+  <form action="{% url 'accounts:signup' %}" method="POST">
     {% csrf_token %}
-    {% bootstrap_form form%}
+    {% bootstrap_form form %}
     <input type="submit" class="btn btn-primary">
   </form>
 {% endblock content %}
