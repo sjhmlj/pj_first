@@ -18,7 +18,10 @@
     </a>
     {% if review.user == request.user %}
       <a href="{% url 'reviews:review_update' review.movie.pk review.pk %}">수정</a>
-      <a href="{% url 'reviews:review_delete' review.movie.pk review.pk %}">삭제</a>
+      <form action="{% url 'reviews:review_delete' review.movie.pk review.pk %}">
+        {% csrf_token %}
+        <input type="submit">
+      </form>
     {% endif %}
   {% endif %}
 
@@ -32,7 +35,13 @@
   {% for comment in comments %}
     <p>{{ comment.user }}
       |
-      {{ comment.created_at }}</p>
+      {{ comment.created_at }}
+      |
+      <form action="{% url 'reviews:comment_delete' review.movie.pk review.pk comment.pk %}">
+        {% csrf_token %}
+        <input type="submit">
+      </form>
+    </p>
     <p>{{ comment.content }}</p>
     <hr>
   {% endfor %}

@@ -5,7 +5,10 @@ from .models import Movie, Review, Comment
 
 
 def index(request):
-    return render(request, 'reviews/index.html')
+    context = {
+        'movies': Movie.objects.all(),
+    }
+    return render(request, 'reviews/index.html', context)
 
 def movie_create(request):
     if request.method == "POST":
