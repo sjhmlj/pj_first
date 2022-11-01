@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+{% block content %}
+  <h1>movie_update</h1>
+  <form action="" method="POST">
+    {% csrf_token %}
+    {% bootstrap5_form form %}
+    <input type="submit">
+  </form>
+{% endblock content %}
