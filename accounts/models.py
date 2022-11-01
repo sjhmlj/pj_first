@@ -11,7 +11,7 @@ class User(AbstractUser):
         "self", symmetrical=False, related_name="followers"
     )
     profile_image = ProcessedImageField(
-        upload_to="images/",
+        upload_to="profile_images/",
         blank=True,
         processors=[ResizeToFill(120, 120)],  ## 유튜브 프로필 이미지 크기 120x120
         format="JPEG",

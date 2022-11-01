@@ -1,9 +1,13 @@
 {% extends 'base.html' %}
 {% load django_bootstrap5 %}
 {% block content %}
-  <form action="{% url 'accounts:profile_update'%}" method="POST">
-    {% csrf_token %}
-    {% bootstrap_form form%}
-    <input type="submit" class="btn btn-primary">
-  </form>
-{% endblock content %}
+  {% if request.path_info == '/accounts/profile_update/' %}
+    <form action="{% url 'accounts:profile_update'%}" method="POST" enctype='multipart/form-data'>
+    {% else %}
+      <form action="{% url 'accounts:password_update'%}" method="POST">
+      {% endif %}
+      {% csrf_token %}
+      {% bootstrap_form form%}
+      <input type="submit" class="btn btn-primary">
+    </form>
+  {% endblock content %}

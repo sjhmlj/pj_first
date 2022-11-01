@@ -31,7 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    "account",
+    "accounts",
     "reviews",
     "django_bootstrap5",
     "django_extensions",
@@ -59,7 +59,7 @@ ROOT_URLCONF = "config.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR/'templates'],
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -134,3 +134,8 @@ AUTH_USER_MODEL = "accounts.User"
 
 MEDIA_ROOT = BASE_DIR / "images"
 MEDIA_URL = "/media/"
+<<<<<<< Updated upstream
+=======
+
+MESSAGE_STORAGE = "django.contrib.messages.storage.cookie.CookieStorage"
+>>>>>>> Stashed changes

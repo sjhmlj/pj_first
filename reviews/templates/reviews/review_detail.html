@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+{% block content %}
+  <h1>review_detail</h1>
+  <h3>{{ review.title }}
+    <span>{{ review.movie.title }}</span></h3>
+  <h5>{{ review.grade }}
+    |
+    {{ review.created_at }}</h5>
+  <p>{{ review.content }}</p>
+  {% if request.user.is_authenticated %}
+    <a href="{% url 'reviews:like' review.movie.pk review.pk %}">
+      {% if request.user in review.like_users.all %}
+        좋아요 취소
+      {% else %}
+        좋아요
+      {% endif %}
+    </a>
+    {% if review.user == request.user %}
+      <a href="{% url 'reviews:review_update' review.movie.pk review.pk %}">수정</a>
+      <a href="{% url 'reviews:review_delete' review.movie.pk review.pk %}">삭제</a>
+    {% endif %}
+  {% endif %}
+  <form action="{% url 'reviews:comment_create' review.pk %}" method="POST">
+    {% csrf_token %}
+    {% bootstrap5_form comment_form %}
+    <input type="submit">
+  </form>
+  <hr>
+  {% for comment in comments %}
+    <p>{{ comment.user }}
+      |
+      {{ comment.created_at }}</p>
+    <p>{{ comment.content }}</p>
+    <hr>
+  {% endfor %}
+{% endblock content %}
