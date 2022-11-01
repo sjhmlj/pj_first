@@ -61,9 +61,9 @@ def detail(request, pk):
 
 def profile_update(request):
     if request.method == "POST":
-        form = CustomUserChangeForm(
-            request.POST, files=request.FILES, instance=request.user
-        )
+
+        form = CustomUserChangeForm(request.POST, request.FILES, instance=request.user)
+
         if form.is_valid():
             form.save()
             return redirect("accounts:detail", request.user.pk)
@@ -77,6 +77,7 @@ def profile_update(request):
 
 
 def password_update(request):
+
     if request.method == "POST":
         form = PasswordChangeForm(request.user, request.POST)
         if form.is_valid():
@@ -89,6 +90,7 @@ def password_update(request):
         "form": form,
     }
     return render(request, "accounts/update.html", context)
+
 
 
 def delete(request):

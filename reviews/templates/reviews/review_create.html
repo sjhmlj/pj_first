@@ -4,7 +4,9 @@
   <h1>review_create</h1>
   <form action="" method="POST">
     {% csrf_token %}
-    {% bootstrap5_form review_form %}
+
+    {% bootstrap_form review_form %}
+
     <input type="submit">
   </form>
 {% endblock content %}

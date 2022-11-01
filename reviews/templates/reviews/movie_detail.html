@@ -3,15 +3,27 @@
 {% block content %}
   <h1>{{ movie.pk }}
     번째 영화</h1>
+
+  <h3>{{ movie.title }}
+    |
+    {{ movie.producer }}
+    |
+    {{ movie.opening_date }}</h3>
+  <img src="{{ movie.image.url }}" alt="{{ movie.image }}">
+  <p>{{ movie.content }}</p>
+  <p>{{ movie.cast }}</p>
   <a href="{% url 'reviews:review_create' movie.pk %}">리뷰 작성</a>
   {% for review in reviews %}
-    <p>{{ review.title }}
+    <p>
+      <a href="{% url 'reviews:review_detail' movie.pk review.pk %}">{{ review.title }}</a>
+
       |
       {{ review.movie.title }}
       |
       {{ review.user.username }}
       |
       {{ review.created_at }}
+
     </p>
     <hr>
   {% endfor %}

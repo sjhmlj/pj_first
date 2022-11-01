@@ -5,9 +5,11 @@
 
   <div>
     {% if user.profile_image %}
-      <img src="{{user.profile_image.url}}" alt="">
+
+      <img src="{{ user.profile_image.url }}" alt="{{ user.profile_image }}">
     {% else %}
-      <img src="{% static 'images/profile_images/no-avatar.png' %}" alt="profile_image">
+      <img src="{% static '/images/profile_images/no-avatar.png' %}" alt="profile_image">
+
     {% endif %}
   </div>
   <div>
