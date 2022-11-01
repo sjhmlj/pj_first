@@ -1,4 +1,5 @@
 from ast import Pass
+from imp import get_suffixes
 from django.shortcuts import render, redirect
 from .forms import CustomUserChangeForm, CustomUserCreationForm
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
@@ -10,6 +11,7 @@ from django.contrib.auth import get_user_model
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import update_session_auth_hash
+from reviews.models import Review
 
 
 def signup(request):
@@ -50,16 +52,23 @@ def logout(request):
     return redirect("reviews:index")
 
 
-@login_required
 def detail(request, pk):
     user = get_object_or_404(get_user_model(), pk=pk)
+    followers_number = user.followers.count()
+    followings_number = user.followings.count()
+    reviews_number = user.review_set.count()
     context = {
         "user": user,
+        "followers_number": followers_number,
+        "followings_number": followings_number,
+        "reviews_number": reviews_number,
     }
     return render(request, "accounts/detail.html", context)
 
 
+@login_required
 def profile_update(request):
+
     if request.method == "POST":
 
         form = CustomUserChangeForm(request.POST, request.FILES, instance=request.user)
@@ -73,9 +82,11 @@ def profile_update(request):
     context = {
         "form": form,
     }
+    print(form)
     return render(request, "accounts/update.html", context)
 
 
+@login_required
 def password_update(request):
 
     if request.method == "POST":
@@ -92,7 +103,7 @@ def password_update(request):
     return render(request, "accounts/update.html", context)
 
 
-
+@login_required
 def delete(request):
     try:
         request.user.delete()
@@ -102,3 +113,17 @@ def delete(request):
         messages.error(request, "error")
         return render(request, "reviews:index")
     return redirect("reviews:index")
+
+
+@login_required
+def follow(request, pk):
+    user = get_object_or_404(get_user_model, id=pk)
+    if user == request.user:
+        messages.warning("자신을 팔로우할 수 없습니다")
+    else:
+        if request.user in user.followers.all():
+            user.followers.remove(request.user)
+        else:
+            user.followers.add(request.user)
+
+    return redirect("account:detail", pk)

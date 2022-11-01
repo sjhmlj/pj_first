@@ -1,13 +1,16 @@
 {% extends 'base.html' %}
 {% load django_bootstrap5 %}
+{% load static %}
 {% block content %}
   <h1>review_detail</h1>
   <h3>{{ review.title }}
     <span>{{ review.movie.title }}</span></h3>
-  <h5>{{ review.grade }}
-    |
+  <h5>평점 :
+    {{ review.grade }}점 |
     {{ review.created_at }}</h5>
   <p>{{ review.content }}</p>
+  <p>좋아요 :
+    {{ review.like_users.count }}개</p>
   {% if request.user.is_authenticated %}
     <a href="{% url 'reviews:like' review.movie.pk review.pk %}">
       {% if request.user in review.like_users.all %}
@@ -24,24 +27,24 @@
       </form>
     {% endif %}
   {% endif %}
-
   <form action="{% url 'reviews:comment_create' review.movie.pk review.pk %}" method="POST">
     {% csrf_token %}
     {% bootstrap_form comment_form %}
-
     <input type="submit">
   </form>
   <hr>
   {% for comment in comments %}
-    <p>{{ comment.user }}
-      |
-      {{ comment.created_at }}
-      |
-      <form action="{% url 'reviews:comment_delete' review.movie.pk review.pk comment.pk %}">
-        {% csrf_token %}
-        <input type="submit">
-      </form>
-    </p>
+    <div class='d-flex align-items-center'>
+      <p class='my-0'>{{ comment.user }}
+        |
+        {{ comment.created_at }}</p>
+      {% if comment.user == request.user %}
+        <form action="{% url 'reviews:comment_delete' review.movie.pk review.pk comment.pk %}" method="POST">
+          {% csrf_token %}
+          <input class='btn text-danger' type="submit" value='삭제'>
+        </form>
+      {% endif %}
+    </div>
     <p>{{ comment.content }}</p>
     <hr>
   {% endfor %}

@@ -13,12 +13,18 @@
     {% endif %}
   </div>
   <div>
-    nickname:
     {{user.nickname}}
   </div>
   <div>
-    email:
-    {{user.email}}
+    팔로워 수:
+    {{followers_number}}
+    || 팔로잉 수:
+    {{followings_number}}
+  </div>
+  <div>
+    작성한 리뷰 수:
+    {{reviews_number}}
+
   </div>
   <div>
     <a href="{% url 'accounts:profile_update' %}">회원정보 수정</a>
