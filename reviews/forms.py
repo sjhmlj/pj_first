@@ -6,6 +6,7 @@ class MovieForm(forms.ModelForm):
     class Meta:
         model = Movie
         fields = '__all__'
+        exclude = ['opening_date']
 
 class ReviewForm(forms.ModelForm):
 
@@ -14,11 +15,10 @@ class ReviewForm(forms.ModelForm):
         fields = [
             'title',
             'content',
-            'movie',
             'grade',
         ]
 
-class CommentForm(forms.ModelsForm):
+class CommentForm(forms.ModelForm):
 
     class Meta:
         model = Comment

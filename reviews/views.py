@@ -8,14 +8,16 @@ def index(request):
 
 def movie_create(request):
     if request.method == "POST":
-        form = MovieForm(request.POST)
-        if form.is_valid():
+        movie_form = MovieForm(request.POST, request.FILES)
+        if movie_form.is_valid():
+            form = movie_form.save(commit=False)
+            form.opening_date = request.POST.get('opening_date')
             form.save()
             return redirect('reviews:index')
     else:
-        form = MovieForm()
+        movie_form = MovieForm()
     context = {
-        'form':form,
+        'form':movie_form,
     }
     return render(request, 'reviews/movie_create.html', context)
 
@@ -30,7 +32,7 @@ def movie_detail(request, pk):
 def movie_update(request, pk):
     movie = get_object_or_404(Movie, pk=pk)
     if request.method == "POST":
-        form = MovieForm(request.POST, instance=movie)
+        form = MovieForm(request.POST, request.FILES, instance=movie)
         if form.is_valid():
             form.save()
             return redirect('reviews:movie_detail', pk)
@@ -74,7 +76,7 @@ def review_update(request, movie_pk, review_pk):
         review_form = ReviewForm(request.POST, instance=review)
         if review_form.is_valid():
             review_form.save()
-            return redirect('reviews:review_detail', review.pk)
+            return redirect('reviews:review_detail', movie_pk, review.pk)
 
     else:
         review_form = ReviewForm(instance=review)
@@ -82,7 +84,7 @@ def review_update(request, movie_pk, review_pk):
         'review_form' : review_form,
     }
 
-    return render(request, 'reviews/review_detail.html', context)
+    return render(request, 'reviews/review_update.html', context)
     
     
 def review_delete(request, movie_pk, review_pk):
@@ -100,10 +102,19 @@ def comment_create(request, movie_pk, review_pk):
             form.user = request.user
             form.review = review
             form.save()
-            return redirect('reviews:review_detail', review_pk)
+            return redirect('reviews:review_detail', movie_pk, review_pk)
 
 def comment_delete(request, movie_pk, review_pk, comment_pk):
     comment = get_object_or_404(Comment, pk=comment_pk)
     if request.method == "POST" and comment.user == request.user:
         comment.delete()
-        return redirect('reviews:review_detail', review_pk)
+        return redirect('reviews:review_detail', movie_pk, review_pk)
+
+
+def like(request, movie_pk, review_pk):
+    review = get_object_or_404(Review, pk=review_pk)
+    if review.like_users.filter(pk=request.user.pk).exists():
+        review.like_users.remove(request.user)
+    else:
+        review.like_users.add(request.user)
+    return redirect('reviews:review_detail', movie_pk, review_pk)
