@@ -44,21 +44,23 @@
     integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
     crossorigin="anonymous"></script>
 
-</body>
-<script>
-  $(function () {
-    $(window).scroll(function () {
-      if ($(this).scrollTop() > 200) {
-        $('#btn_top').fadeIn();
-      } else {
-        $('#btm_top').fadeOut();
-      }
-    });
-    $('#btn_top').click(function () {
-      $('html, body').animate({
-        scrollTop: 0
-      }, 500);
-      return false;
+  </body>
+  <script>
+    $(function () {
+      $(window).scroll(function () {
+        if ($(this).scrollTop() > 200) {
+          $('#btn_top').fadeIn();
+        } else {
+          $('#btn_top').fadeOut();
+        }
+      });
+      $('#btn_top').click(function () {
+        $('html, body').animate({
+          scrollTop: 0
+        }, 500);
+        return false;
+      });
+
     });
   });
 </script>
