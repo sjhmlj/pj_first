@@ -3,6 +3,7 @@
 {% block content %}
   <h1>{{ movie.pk }}
     번째 영화</h1>
+
   <h3>{{ movie.title }}
     |
     {{ movie.producer }}
@@ -15,13 +16,14 @@
   {% for review in reviews %}
     <p>
       <a href="{% url 'reviews:review_detail' movie.pk review.pk %}">{{ review.title }}</a>
+
       |
       {{ review.movie.title }}
       |
       {{ review.user.username }}
       |
       {{ review.created_at }}
-      |
+
     </p>
     <hr>
   {% endfor %}
