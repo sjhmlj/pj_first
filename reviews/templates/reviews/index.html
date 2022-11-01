@@ -1,5 +1,11 @@
 {% extends 'base.html' %}
+{% load static %}
 {% load django_bootstrap5 %}
 {% block content %}
   <h1>index</h1>
+  <div class="d-flex">
+    {% for movie in movies %}
+      <a href="{% url 'reviews:movie_detail' movie.pk %}"><img class='rounded' src="{{ movie.image.url }}" alt="{{ movie.image }}"></a>
+    {% endfor %}
+  </div>
 {% endblock content %}
