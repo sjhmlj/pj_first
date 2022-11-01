@@ -2,9 +2,11 @@
 {% load django_bootstrap5 %}
 {% block content %}
   <h1>movie_update</h1>
-  <form action="" method="POST">
+
+  <form action="" method="POST" enctype='multipart/form-data'>
     {% csrf_token %}
-    {% bootstrap5_form form %}
+    {% bootstrap_form form %}
+
     <input type="submit">
   </form>
 {% endblock content %}
