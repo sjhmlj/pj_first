@@ -12,6 +12,10 @@
   <p>{{ movie.content }}</p>
   <p>{{ movie.cast }}</p>
   <a href="{% url 'reviews:review_create' movie.pk %}">리뷰 작성</a>
+
+  <h3>리뷰 목록</h3>
+  <hr>
+
   {% for review in reviews %}
     <p>
       <a href="{% url 'reviews:review_detail' movie.pk review.pk %}">{{ review.title }}</a>
