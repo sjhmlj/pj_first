@@ -1,12 +1,15 @@
+from ast import Pass
 from django.shortcuts import render, redirect
 from .forms import CustomUserChangeForm, CustomUserCreationForm
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
 from django.shortcuts import get_object_or_404
 from .models import User
 from django.contrib.auth import get_user_model
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import update_session_auth_hash
 
 
 def signup(request):
@@ -17,6 +20,9 @@ def signup(request):
             auth_login(request, user)
             messages.success(request, "Welcome!")
             return redirect("reviews:index")
+        else:
+            print("error")
+            print(form.error_messages)
     else:
         form = CustomUserCreationForm
     context = {
@@ -44,6 +50,7 @@ def logout(request):
     return redirect("reviews:index")
 
 
+@login_required
 def detail(request, pk):
     user = get_object_or_404(get_user_model(), pk=pk)
     context = {
@@ -54,10 +61,13 @@ def detail(request, pk):
 
 def profile_update(request):
     if request.method == "POST":
+
         form = CustomUserChangeForm(request.POST, request.FILES, instance=request.user)
+
         if form.is_valid():
             form.save()
             return redirect("accounts:detail", request.user.pk)
+
     else:
         form = CustomUserChangeForm(instance=request.user)
     context = {
@@ -67,13 +77,26 @@ def profile_update(request):
 
 
 def password_update(request):
-    pass
+
+    if request.method == "POST":
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request, form.user)
+            return redirect("accounts:detail", request.user.pk)
+    else:
+        form = PasswordChangeForm(request.user)
+    context = {
+        "form": form,
+    }
+    return render(request, "accounts/update.html", context)
+
 
 
 def delete(request):
     try:
-        auth_logout(request, request.user)
         request.user.delete()
+        auth_logout(request)
         messages.success(request, "The user is deleted")
     except:
         messages.error(request, "error")

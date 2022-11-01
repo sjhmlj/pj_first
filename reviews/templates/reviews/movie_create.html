@@ -2,11 +2,13 @@
 {% load django_bootstrap5 %}
 {% block content %}
   <h1>movie_create</h1>
+
   <form action="" method="POST" enctype='multipart/form-data'>
     {% csrf_token %}
     {% bootstrap_form form %}
     <label for="opening_date">개봉일</label>
     <input class='form-control mb-3' type="date" name="opening_date">
+
     <input type="submit">
   </form>
 {% endblock content %}
