@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load django_bootstrap5 %}
+{% load static %}
 {% block content %}
 
   {% if request.path_info == '/accounts/profile_update/' %}
@@ -12,4 +13,3 @@
       <input type="submit" class="btn btn-primary">
     </form>
   {% endblock content %}
-
