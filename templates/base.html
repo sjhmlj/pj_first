@@ -19,6 +19,9 @@
   <style>
     body {
       font-family: 'Noto Sans KR', sans-serif;
+      position: relative;
+      min-height: 100%;
+      padding-bottom: 80px;
     }
   </style>
 </head>
@@ -30,13 +33,15 @@
     {% block content %}{% endblock content %}
   </div>
   <!-- button -->
-  <div class="top_button">
+  <div class="btn_top">
     <i class="bi bi-arrow-up-circle-fill" style="width: 50px; height: 50px;"></i>
   </div>
   <!-- footer -->
-  <footer class="fixed-bottom text-center" style="height: 100px; width: 100%; text-align: center">
-    <p>🖥Project by Team_11 and Supported by MultiCampus & HyperGrowth🖥</p>
-  </footer>
+  <div class="wrap">
+    <footer class="footer_">
+      <p>🖥Project by Team_11 and Supported by MultiCampus & HyperGrowth🖥</p>
+    </footer>
+  </div>
   {% bootstrap_javascript %}
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <!-- JavaScript Bundle with Popper -->
@@ -51,7 +56,7 @@
       if ($(this).scrollTop() > 200) {
         $('#btn_top').fadeIn();
       } else {
-        $('#btm_top').fadeOut();
+        $('#btn_top').fadeOut();
       }
     });
     $('#btn_top').click(function () {
