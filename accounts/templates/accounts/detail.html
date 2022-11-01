@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+{% load static %}
+{% block content %}
+  <div>
+    <img src="{% static 'accounts/static/images/profile_images/no-avatar.png' %}" alt="profile_image">
+  </div>
+  <div>
+    {{user.username}}
+  </div>
+  <div>
+    {{user.email}}
+  </div>
+  <div>
+    <a href="{% url 'accounts:profile_update' %}">회원정보 수정</a>
+    <a href="{% url 'accounts:password_update' %}">비밀번호 수정</a>
+  </div>
+{% endblock content %}
