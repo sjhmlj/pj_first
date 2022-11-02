@@ -17,6 +17,11 @@ class ReviewForm(forms.ModelForm):
             'content',
             'grade',
         ]
+        labels = {
+            'title':'제목',
+            'content':'내용',
+            'grade':'평점'
+        }
 
 class CommentForm(forms.ModelForm):
 
@@ -25,3 +30,6 @@ class CommentForm(forms.ModelForm):
         fields = [
             'content',
         ]
+        labels = {
+            'content':'댓글'
+        }
