@@ -4,7 +4,6 @@
 <!DOCTYPE html>
 <html lang="en">
 
-
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -21,60 +20,51 @@
     body {
       font-family: 'Noto Sans KR', sans-serif;
       padding-bottom: 60px;
-      height: 100%;
-      width: 100%;
     }
   </style>
 </head>
-
-<body>
-  <!-- navbar -->
-  {% include "navbar.html" %}
-  {% if messages %}
-  {% for messages in messages %}
-  <div class="alert alert-{{ messages.tags }}">
-    {{ messages }}
-  </div>
-  {% endfor %}
-  {% endif %}
-  <div class="wrap">
-    <div class='container my-3'>
+  <body>
+    <!-- navbar -->
+    {% include "navbar.html" %}
+    {% if messages %}
+      {% for messages in messages %}
+        <div class="alert alert-{{ messages.tags }}">
+          {{ messages }}
+        </div>
+      {% endfor %}
+    {% endif %}
+    <div class='container mt-3 mb-5 pb-5'>
       {% block content %}{% endblock content %}
-      {% block script %}{% endblock script %}
       <!-- button -->
       <div class="btn_top">
         <i class="bi bi-arrow-up-circle-fill" style="width: 50px; height: 50px;"></i>
       </div>
     </div>
-  </div>
-  </div>
-  <!-- footer -->
-  <div class="footer_ fixed-bottom d-flex justify-content-center align-items-center text-align-center">
-    <p>🖥Project by Team_11 and Supported by MultiCampus & HyperGrowth🖥</p>
-  </div>
-  {% bootstrap_javascript %}
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-  <!-- JavaScript Bundle with Popper -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
-    crossorigin="anonymous"></script>
-</body>
-<script>
-  $(function () {
-    $(window).scroll(function () {
-      if ($(this).scrollTop() > 200) {
-        $('#btn_top').fadeIn();
-      } else {
-        $('#btn_top').fadeOut();
-      }
-    });
-    $('#btn_top').click(function () {
-      $('html, body').animate({
-        scrollTop: 0
-      }, 500);
-      return false;
-    });
-  });
-</script>
-
+    <!-- footer -->
+    <div style="height:45px;" class="footer_ fixed-bottom d-flex justify-content-center align-items-center">
+      <p class='m-0'>🖥Project by Team_11 and Supported by MultiCampus & HyperGrowth🖥</p>
+    </div>
+    {% bootstrap_javascript %}
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    {% block script %}{% endblock script %}
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+    <script>
+      $(function () {
+        $(window).scroll(function () {
+          if ($(this).scrollTop() > 200) {
+            $('#btn_top').fadeIn();
+          } else {
+            $('#btn_top').fadeOut();
+          }
+        });
+        $('#btn_top').click(function () {
+          $('html, body').animate({
+            scrollTop: 0
+          }, 500);
+          return false;
+        });
+      });
+    </script>
+  </body>
 </html>

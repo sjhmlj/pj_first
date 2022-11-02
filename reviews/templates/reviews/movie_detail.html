@@ -2,24 +2,32 @@
 {% load static %}
 {% load django_bootstrap5 %}
 {% block content %}
-  <h1>{{ movie.pk }}
-    번째 영화</h1>
-  <div class="d-flex justify-content-between">
-    <h3>{{ movie.title }}
-      |
-      {{ movie.producer }}
-      |
-      {{ movie.opening_date }}</h3>
+  <div class="d-flex justify-content-end">
     {% if request.user.is_superuser %}
       <!-- 로그인한 사람이 관리자이면 수정 버튼 생성 -->
       <a href="{% url 'reviews:movie_update' movie.pk %}">수정</a>
     {% endif %}
   </div>
-  <img src="{{ movie.image.url }}" alt="{{ movie.image }}">
-  <p>{{ movie.content }}</p>
-  <p>{{ movie.cast }}</p>
-  <a class='btn btn-outline-dark' href="{% url 'reviews:review_create' movie.pk %}">리뷰 작성</a>
-  <h3>리뷰 목록</h3>
+  <div class="d-flex my-2">
+    <img class='rounded' src="{{ movie.image.url }}" alt="{{ movie.image }}">
+    <div class='d-flex flex-column justify-content-center mx-3'>
+      <h2>{{ movie.title }}
+        <span class='fs-4 text-secondary'>({{ movie.opening_date.year }})</span></h2>
+      <div class='mt-5 mb-2'>
+        <h5>줄거리</h5>
+        <p>{{ movie.content }}</p>
+      </div>
+      <div class='my-2'>
+        <h5>출연/제작</h5>
+        <p>{{ movie.cast }}
+          {{ movie.producer }}</p>
+      </div>
+    </div>
+  </div>
+  <div class='d-flex justify-content-between mt-5'>
+    <h3>리뷰 목록</h3>
+    <a class='btn btn-outline-dark' href="{% url 'reviews:review_create' movie.pk %}">리뷰 작성</a>
+  </div>
   <div>
     <div class="row text-center fs-5 fw-bold my-3">
       <div class="col-6">리뷰제목</div>
