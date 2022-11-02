@@ -18,19 +18,27 @@
   <img src="{{ movie.image.url }}" alt="{{ movie.image }}">
   <p>{{ movie.content }}</p>
   <p>{{ movie.cast }}</p>
-  <a href="{% url 'reviews:review_create' movie.pk %}">리뷰 작성</a>
+  <a class='btn btn-outline-dark' href="{% url 'reviews:review_create' movie.pk %}">리뷰 작성</a>
   <h3>리뷰 목록</h3>
-  <hr>
-  {% for review in reviews %}
-    <p>
-      <a href="{% url 'reviews:review_detail' movie.pk review.pk %}">{{ review.title }}</a>
-      |
-      {{ review.movie.title }}
-      |
-      {{ review.user.username }}
-      |
-      {{ review.created_at }}
-    </p>
+  <div class='border rounded'>
+    <div class="row text-center fs-5 fw-bold my-3">
+      <div class="col-6">리뷰제목</div>
+      <div class="col-3">작성자</div>
+      <div class="col-3">작성시간</div>
+    </div>
     <hr>
-  {% endfor %}
+    {% for review in reviews %}
+      <div class="row text-center">
+        <div class="col-6">
+          <a href="{% url 'reviews:review_detail' review.pk %}">{{ review.title }}</a>
+        </div>
+        <div class="col-3">
+          <a href="{% url 'accounts:detail' review.user.pk %}">{{ review.user.nickname }}</a>
+        </div>
+        <div class="col-3">{{ review.created_at }}
+        </div>
+      </div>
+      <hr>
+    {% endfor %}
+  </div>
 {% endblock content %}
