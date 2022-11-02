@@ -11,7 +11,7 @@
     <span class="mb-3">유저</span>
     {% for user in user %}
     <div class="col-9 col-sm-12 col-md-4 col-md-12 col-lg-4">
-      <div class="card text-center" style="min-width: 18rem;">
+      <div class="card text-center" style="min-width: 10rem;">
         <a href="{{ user.get_url }}" class="text-decoration-none text-dark">
           <h5>{{ user.username }}</h5>
         </a>
@@ -33,7 +33,7 @@
     <span class="mb-3">리뷰</span>
     {% for review in review %}
     <div class="col-9 col-sm-12 col-md-4 col-md-12 col-lg-4">
-      <div class="card text-center" style="min-width: 18rem;">
+      <div class="card text-center" style="min-width: 10rem;">
         <a href="{{ review.get_url }}" class="text-decoration-none text-dark">
           <h5>{{ review.title }}</h5>
         </a>
@@ -55,8 +55,9 @@
     <span class="mb-3">영화</span>
     {% for movie in movie %}
     <div class="col-9 col-sm-12 col-md-4 col-md-12 col-lg-4">
-      <div class="card text-center" style="min-width: 18rem;">
+      <div class="card text-center" style="min-width: 10rem;">
         <a href="{{ movie.get_url }}" class="text-decoration-none text-dark">
+          <img src="{{ movie.image.url }}" alt="{{ movie.title }}">
           <h5>{{ movie.title }}</h5>
         </a>
         <div class="card-body">
