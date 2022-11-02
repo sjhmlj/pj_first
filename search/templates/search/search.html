@@ -2,8 +2,70 @@
 {% load django_bootstrap5 %}
 
 {% block content %}
-<div class="container">
-  <p><b>"{{ query }}"</b>의 검색결과</p>
+<div class="my-2">
+  <span><b>"{{ query }}"</b>의 검색결과</span>
 </div>
-
+<!-- 유저 -->
+<div class="container">
+  <div class="row mx-auto">
+    <span>유저</span>
+    {% for user in user %}
+    <div class="col-9 col-sm-12 col-md-4 col-md-12 col-lg-4">
+      <div class="card text-center" style="min-width: 18rem;">
+        <a href="{{ user.get_url }}">
+          <h4>{{ user.username }}</h4>
+        </a>
+      </div>
+    </div>
+    {% empty %}
+    <div class="row mx-auto">
+      <p style="padding-top: 20px;">검색 결과가 없습니다.</p>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+<!-- 리뷰 -->
+<div class="container">
+  <div class="row mx-auto">
+    <span>리뷰</span>
+    {% for review in review %}
+    <div class="col-9 col-sm-12 col-md-4 col-md-12 col-lg-4">
+      <div class="card text-center" style="min-width: 18rem;">
+        <a href="{{ review.get_url }}">
+          <h4>{{ review.title }}</h4>
+        </a>
+        <div class="card-body">
+          <p>{{ review.content }}</p>
+        </div>
+      </div>
+    </div>
+    {% empty %}
+    <div class="row mx-auto">
+      <p style="padding-top: 20px;">검색 결과가 없습니다.</p>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+<!-- 영화 -->
+<div class="container">
+  <div class="row mx-auto">
+    <span>영화</span>
+    {% for movie in movie %}
+    <div class="col-9 col-sm-12 col-md-4 col-md-12 col-lg-4">
+      <div class="card text-center" style="min-width: 18rem;">
+        <a href="{{ movie.get_url }}">
+          <h4>{{ movie.title }}</h4>
+        </a>
+        <div class="card-body">
+          <p>{{ movie.content }}</p>
+        </div>
+      </div>
+    </div>
+    {% empty %}
+    <div class="row mx-auto">
+      <p style="padding-top: 20px;">검색 결과가 없습니다.</p>
+    </div>
+    {% endfor %}
+  </div>
+</div>
 {% endblock content %}
