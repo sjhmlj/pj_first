@@ -5,8 +5,14 @@
   <h1>{{ review.title }}
   </h1>
   <div class="d-flex justify-content-between">
-    <h5>영화명:
-      {{ review.movie.title }}</h5>
+    <div>
+      <h5>영화명:
+        {{ review.movie.title }}</h5>
+      <p>작성자:
+        <a href="{% url 'accounts:detail' review.user.pk %}">
+          {{ review.user }}</a>
+      </p>
+    </div>
     <div>
       <h5>평점 :
         {{ review.grade }}/5점</h5>

@@ -15,7 +15,6 @@ class ReviewForm(forms.ModelForm):
         fields = [
             'title',
             'content',
-            'grade',
         ]
         labels = {
             'title':'제목',

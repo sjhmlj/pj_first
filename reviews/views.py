@@ -67,6 +67,7 @@ def review_create(request, movie_pk):
             form = review_form.save(commit=False)
             form.movie = movie
             form.user = request.user
+            form.grade = request.POST.get('grade')
             form.save()
             messages.success(request, '리뷰가 등록되었습니다.')
             return redirect('reviews:movie_detail', movie_pk)
