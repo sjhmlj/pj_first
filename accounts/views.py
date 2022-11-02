@@ -16,8 +16,6 @@ def signup(request):
         if form.is_valid():
             user = form.save()
             auth_login(request, user)
-            messages.success(request, "Welcome!")
-
             return redirect("reviews:index")
         else:
             print("error")
@@ -31,12 +29,10 @@ def signup(request):
 
 
 def login(request):
-    messages.add_message(request, messages.SUCCESS, "login")
     if request.method == "POST":
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
             auth_login(request, form.get_user())
-            messages.success(request, "안녕하세요")
             return redirect("reviews:index")
     else:
         form = AuthenticationForm()
@@ -47,7 +43,6 @@ def login(request):
 
 
 def logout(request):
-    messages.add_message(request, messages.SUCCESS, "logout")
     auth_logout(request)
     return redirect("reviews:index")
 
@@ -82,7 +77,6 @@ def profile_update(request):
     context = {
         "form": form,
     }
-    print(form)
     return render(request, "accounts/update.html", context)
 
 
@@ -108,7 +102,7 @@ def delete(request):
     try:
         request.user.delete()
         auth_logout(request)
-        messages.success(request, "The user is deleted")
+        messages.success(request, "탈퇴하였습니다.")
     except:
         messages.error(request, "error")
         return render(request, "reviews:index")

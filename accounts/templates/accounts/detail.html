@@ -2,95 +2,102 @@
 {% load django_bootstrap5 %}
 {% load static %}
 {% block content %}
+  <div class='d-flex justify-content-center'>
+    <div class="w-50 mt-5">
 
-  <div>
-    {% if user.profile_image %}
+      <div class='d-flex'>
 
-      <img src="{{ user.profile_image.url }}" alt="{{ user.profile_image }}">
-    {% else %}
-      <img src="{% static '/images/profile_images/no-avatar.png' %}" alt="profile_image">
+        {% if user.profile_image %}
 
-    {% endif %}
-  </div>
-  <div>
-    {{user.nickname}}
-  </div>
-  <div>
-    팔로워 수:
-    <span id="followers">{{user.followers.all|length}}</span>
-    || 팔로잉 수:
-    <span id="followings">{{user.followings.all|length}}</span>
-    ||
-    {% if request.user != user %}
-      <form id="follow-form" data-user-id="{{ user.pk }}">
-        {% csrf_token %}
-        {% if request.user in user.followers.all %}
-          <input type="submit" value="언팔로우" class="btn btn-primary">
+          <img src="{{ user.profile_image.url }}" alt="{{ user.profile_image }}" class="rounded-circle border border-light">
         {% else %}
-          <input type="submit" value="팔로우" class="btn btn-primary">
+          <img src="{% static '/images/profile_images/no-avatar.png' %}" alt="no-avatar" class="rounded-circle border border-light">
+
         {% endif %}
-      </form>
-    {% endif %}
-  </div>
-  <div>
-    작성한 리뷰 수:
-    {{reviews_number}}
+        <div class='px-5 pt-3'>
+          <h4>
+            {{user.nickname}}님
+          </h4>
+          {% if user.email %}
+            <div>{{user.email}}</div>
+          {% else %}
+            <div>no email</div>
+          {% endif %}
+          <div>
+            팔로워
+            <span id="followers">{{user.followers.all|length}}</span>
+            | 팔로잉
+            <span id="followings">{{user.followings.all|length}}</span>
 
-  </div>
+            <div>
+              작성한 리뷰 수:
+              {{reviews_number}}
 
-  <div>
-    {% if user == request.user %}
-      <a href="{% url 'accounts:profile_update' %}">회원정보 수정</a>
-      <a href="{% url 'accounts:password_update' %}">비밀번호 수정</a>
-    {% endif %}
-  </div>
-  {% if messages %}
-    {% for message in messages %}
-      <div class="alert alert-{{ message.tags }}">
-        {{ message }}
+            </div>
+          </div>
+        </div>
+        <div class='mt-5'>
+          {% if request.user != user %}
+            <form id="follow-form" data-user-id="{{ user.pk }}">
+              {% csrf_token %}
+              {% if request.user in user.followers.all %}
+                <input type="submit" value="언팔로우" class="btn btn-primary">
+              {% else %}
+                <input type="submit" value="팔로우" class="btn btn-primary">
+              {% endif %}
+            </form>
+          {% endif %}
+        </div>
       </div>
-    {% endfor %}
-  {% endif %}
-{% endblock content %}
-{% block script %}
-  <script>
-    const follow = document.querySelector('#follow-form')
 
-    const csrftoken = document
-      .querySelector('[name=csrfmiddlewaretoken]')
-      .value
-      follow
-      .addEventListener('submit', function (event) {
-        event.preventDefault()
-        const userId = event
-          .target
-          .dataset
-          .userId
-          axios({
-            method: 'post',
-            url: `/accounts/follow/${userId}/`,
-            headers: {
-              'X-CSRFToken': csrftoken
-            }
+      <div>
+{% comment %} nabvar에서 접근 가능하게 - 프로필, 정보 수정, 로그아웃 {% endcomment %}
+        <div> 
+          {% if user == request.user %}
+            <a href="{% url 'accounts:profile_update' %}">정보 수정</a>
+          {% endif %}
+        </div>
+      </div>
+        
+      </div>
+    </div>
+  {% endblock content %}
+  {% block script %}
+    <script>
+      const follow = document.querySelector('#follow-form')
+
+      const csrftoken = document
+        .querySelector('[name=csrfmiddlewaretoken]')
+        .value
+        follow
+        .addEventListener('submit', function (event) {
+          event.preventDefault()
+          const userId = event.target.dataset.userId
+            axios({
+              method: 'post',
+              url: `/accounts/follow/${userId}/`,
+              headers: {
+                'X-CSRFToken': csrftoken
+              }
+            })
+            .then((response) => {
+              const isFollowed = response.data.is_followed
+              const followBtn = document.querySelector('#follow-form > input[type=submit]')
+              if (isFollowed == true) {
+                followBtn.value = '언팔로우'
+              } else {
+                followBtn.value = '팔로우'
+              }
+              const followings = document.querySelector('#followings')
+              const followers = document.querySelector('#followers')
+              const followingsCount = response.data.followings_count
+              const followersCount = response.data.followers_count
+              followings.innerText = followingsCount
+              followers.innerText = followersCount
+            })
+            .catch((error) => {
+              console.log(error.response)
+            })
           })
-          .then((response) => {
-            const isFollowed = response.data.is_followed
-            const followBtn = document.querySelector('#follow-form > input[type=submit]')
-            if (isFollowed == true) {
-              followBtn.value = '언팔로우'
-            } else {
-              followBtn.value = '팔로우'
-            }
-            const followings = document.querySelector('#followings')
-            const followers = document.querySelector('#followers')
-            const followingsCount = response.data.followings_count
-            const followersCount = response.data.followers_count
-            followings.innerText = followingsCount
-            followers.innerText = followersCount
-          })
-          .catch((error) => {
-            console.log(error.response)
-          })
-        })
-  </script>
-{% endblock script %}
+    </script>
+  {% endblock script %}
