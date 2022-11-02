@@ -35,19 +35,19 @@
   </div>
   {% endfor %}
   {% endif %}
-  <div class='container my-5'>
-    {% block content %}{% endblock content %}
-  </div>
-  <!-- button -->
-  <div class="btn_top">
-    <i class="bi bi-arrow-up-circle-fill" style="width: 50px; height: 50px;"></i>
+  <div class="wrap">
+    <div class='container my-5'>
+      {% block content %}{% endblock content %}
+      <!-- button -->
+      <div class="btn_top">
+        <i class="bi bi-arrow-up-circle-fill" style="width: 50px; height: 50px;"></i>
+      </div>
+    </div>
   </div>
   <!-- footer -->
-  <div class="wrap">
-    <footer class="footer_">
-      <p>🖥Project by Team_11 and Supported by MultiCampus & HyperGrowth🖥</p>
-    </footer>
-  </div>
+  <footer class="footer_">
+    <p>🖥Project by Team_11 and Supported by MultiCampus & HyperGrowth🖥</p>
+  </footer>
   {% bootstrap_javascript %}
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <!-- JavaScript Bundle with Popper -->
