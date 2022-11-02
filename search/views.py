@@ -13,7 +13,9 @@ def searchResult(request):
     query = None
     if "q" in request.GET:
         query = request.GET.get("q")
-        user = User.objects.all().filter(Q(username__contains=query))
+        user = User.objects.all().filter(
+            Q(username__contains=query) | Q(nickname__contains=query)
+        )
         review = Review.objects.all().filter(
             Q(title__contains=query) | Q(content__contains=query)
         )

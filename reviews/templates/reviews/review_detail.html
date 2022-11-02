@@ -2,32 +2,60 @@
 {% load django_bootstrap5 %}
 {% load static %}
 {% block content %}
-  <h1>review_detail</h1>
-  <h3>{{ review.title }}
-    <span>{{ review.movie.title }}</span></h3>
-  <h5>평점 :
-    {{ review.grade }}점 |
-    {{ review.created_at }}</h5>
-  <p>{{ review.content }}</p>
+  <h1>{{ review.title }}
+  </h1>
+  <div class="d-flex justify-content-between">
+    <h5>영화명:
+      {{ review.movie.title }}</h5>
+    <div>
+      <h5>평점 :
+        {{ review.grade }}/5점</h5>
+      <span class='text-secondary'>{{ review.created_at }}</span>
+    </div>
+  </div>
+  <p style='height:10rem;' class='my-5'>{{ review.content }}</p>
   {% if request.user.is_authenticated %}
     <div class="d-flex justify-content-center">
-      <div class="border rounded p-2">
-        <a class="text-decoration-none" href="{% url 'reviews:like' review.pk %}">
-          {% if request.user in review.like_users.all %}
-            <i class="bi bi-suit-heart-fill text-danger fs-2"></i>
-          {% else %}
-            <i class="bi bi-suit-heart text-danger fs-2"></i>
-          {% endif %}
-        </a>
-        <span class="text-center fs-2 ms-2">{{ review.like_users.count }}</span>
+      <div class="d-flex align-items-center border rounded">
+        {% if request.user in review.like_users.all %}
+          <i id="like-btn" data-review-id="{{ review.pk }}" class="btn bi bi-suit-heart-fill text-danger fs-2 px-2 py-0"></i>
+        {% else %}
+          <i id="like-btn" data-review-id="{{ review.pk }}" class="btn bi bi-suit-heart text-danger fs-2"></i>
+        {% endif %}
+        <span id="like-count" class="text-center fs-2 mx-2">{{ review.like_users.count }}</span>
       </div>
     </div>
     {% if review.user == request.user %}
-      <a href="{% url 'reviews:review_update' review.pk %}">수정</a>
-      <form action="{% url 'reviews:review_delete' review.movie.pk review.pk %}">
-        {% csrf_token %}
-        <input type="submit">
-      </form>
+      <div class='d-flex justify-content-end'>
+        <a class='btn btn-outline-dark' href="{% url 'reviews:review_update' review.pk %}">수정</a>
+        <!-- Button trigger modal -->
+        <button type="button" class="mx-2 btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#exampleModal">
+          삭제
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">정말 삭제하시겠습니까?</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                삭제된 게시글은 복구할 수 없으며 관련된 댓글 또한 삭제됩니다.
+              </div>
+              <div class="modal-footer">
+                <form class='mx-2' action="{% url 'reviews:review_delete' review.movie.pk review.pk %}">
+                  {% csrf_token %}
+                  <input class='btn btn-outline-danger ' type="submit" value='삭제'>
+                </form>
+                <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">아니오</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
     {% endif %}
   {% endif %}
   <form action="{% url 'reviews:comment_create' review.pk %}" method="POST">
@@ -38,28 +66,54 @@
   <hr>
   {% for comment in comments %}
     <div class='d-flex align-items-center'>
-      <p class='my-0'>{{ comment.user }}
-        |
-        {{ comment.created_at }}
-        {% if request.user.is_authenticated %}
-          <a class="text-decoration-none" href="{% url 'reviews:comment_like' comment.pk %}">
-            {% if request.user in comment.like_users.all %}
-              <i class="bi bi-hand-thumbs-up-fill"></i>
-            {% else %}
-              <i class="bi bi-hand-thumbs-up"></i>
-            {% endif %}
-          </a>
-          <span>{{ comment.like_users.count }}</span>
-        {% endif %}
-      </p>
+      <a href="{% url 'accounts:detail' comment.user.pk %}" class='my-0 text-decoration-none text-dark'>{{ comment.user }}</a>
+      <span style='font-size:0.8rem;' class='text-secondary mx-2'>{{ comment.created_at }}</span>
+      {% if request.user.is_authenticated %}
+        <a class='text-decoration-none' href="{% url 'reviews:comment_like' comment.pk %}">
+          {% if request.user in comment.like_users.all %}
+            <i class="bi bi-hand-thumbs-up-fill text-dark"></i>
+          {% else %}
+            <i class="bi bi-hand-thumbs-up text-dark"></i>
+          {% endif %}
+        </a>
+        <span id="comment-like-count">{{ comment.like_users.count }}</span>
+      {% endif %}
       {% if comment.user == request.user %}
-        <form action="{% url 'reviews:comment_delete' review.pk comment.pk %}" method="POST">
+        <form class='mx-2' action="{% url 'reviews:comment_delete' review.pk comment.pk %}" method="POST">
           {% csrf_token %}
-          <input class='btn text-danger' type="submit" value='삭제'>
+          <input class='btn btn-outline-danger py-0 px-1' type="submit" value='삭제'>
         </form>
       {% endif %}
     </div>
-    <p>{{ comment.content }}</p>
+    <p class='my-2'>{{ comment.content }}</p>
     <hr>
   {% endfor %}
 {% endblock content %}
+
+{% block script %}
+  <script>
+    const likeBtn = document.querySelector('#like-btn')
+    likeBtn.addEventListener('click', function (event) {
+      axios({method: 'get', url: `/reviews/review/${event.target.dataset.reviewId}/like/`}).then(response => {
+        if (response.data.isLiked === true) {
+          likeBtn
+            .classList
+            .remove('bi-suit-heart')
+          likeBtn
+            .classList
+            .add('bi-suit-heart-fill')
+        } else {
+          likeBtn
+            .classList
+            .remove('bi-suit-heart-fill')
+          likeBtn
+            .classList
+            .add('bi-suit-heart')
+        }
+        const likeCount = document.querySelector('#like-count')
+        likeCount.innerText = response.data.likeCount
+      })
+    })
+  </script>
+
+{% endblock script %}
