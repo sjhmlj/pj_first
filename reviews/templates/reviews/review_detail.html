@@ -6,8 +6,8 @@
   </h1>
   <div class="d-flex justify-content-between">
     <div>
-      <h5>영화명:
-        {{ review.movie.title }}</h5>
+      <h5 class='text-secondary'>
+        {{ review.movie.title }}({{ review.movie.opening_date.year }})</h5>
       <p>작성자:
         <a href="{% url 'accounts:detail' review.user.pk %}">
           {{ review.user }}</a>
