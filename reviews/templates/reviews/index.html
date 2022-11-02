@@ -3,8 +3,10 @@
 {% load django_bootstrap5 %}
 {% block content %}
   <h1>index</h1>
+  <!-- 영화 리스트 -->
   <div class="d-flex">
     {% for movie in movies %}
+      <!-- 영화포스터이미지에 링크 -->
       <a href="{% url 'reviews:movie_detail' movie.pk %}"><img class='rounded' src="{{ movie.image.url }}" alt="{{ movie.image }}"></a>
     {% endfor %}
   </div>

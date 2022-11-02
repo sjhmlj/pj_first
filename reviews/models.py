@@ -12,7 +12,7 @@ class Movie(models.Model):
     cast = models.TextField()
     producer = models.CharField(max_length=20)
     opening_date = models.DateField()
-    image = ProcessedImageField(blank=False, upload_to='images/', processors=[Thumbnail(400, 300)], format='JPEG', options={'quality':80})
+    image = ProcessedImageField(blank=False, upload_to='images/', processors=[Thumbnail(300, 400)], format='JPEG', options={'quality':80})
 
 class Review(models.Model):
     title = models.CharField(max_length=20)
