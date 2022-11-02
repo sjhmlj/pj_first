@@ -19,7 +19,7 @@ def searchResult(request):
         review = Review.objects.all().filter(
             Q(title__contains=query) | Q(content__contains=query)
         )
-        movie = Review.objects.all().filter(
+        movie = Movie.objects.all().filter(
             Q(title__contains=query) | Q(content__contains=query)
         )
     context = {
