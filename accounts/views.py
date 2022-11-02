@@ -1,16 +1,12 @@
-from ast import Pass
-from imp import get_suffixes
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .forms import CustomUserChangeForm, CustomUserCreationForm
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
-from django.shortcuts import get_object_or_404
 from .models import User
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, update_session_auth_hash
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import update_session_auth_hash
 from reviews.models import Review
 
 
@@ -21,6 +17,7 @@ def signup(request):
             user = form.save()
             auth_login(request, user)
             messages.success(request, "Welcome!")
+
             return redirect("reviews:index")
         else:
             print("error")
@@ -34,10 +31,12 @@ def signup(request):
 
 
 def login(request):
+    messages.add_message(request, messages.SUCCESS, "login")
     if request.method == "POST":
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
             auth_login(request, form.get_user())
+            messages.success(request, "안녕하세요")
             return redirect("reviews:index")
     else:
         form = AuthenticationForm()
@@ -48,6 +47,7 @@ def login(request):
 
 
 def logout(request):
+    messages.add_message(request, messages.SUCCESS, "logout")
     auth_logout(request)
     return redirect("reviews:index")
 
@@ -115,15 +115,24 @@ def delete(request):
     return redirect("reviews:index")
 
 
+from django.http import JsonResponse
+
+
 @login_required
 def follow(request, pk):
-    user = get_object_or_404(get_user_model, id=pk)
-    if user == request.user:
-        messages.warning("자신을 팔로우할 수 없습니다")
-    else:
+    user = get_object_or_404(get_user_model(), id=pk)
+    if user != request.user:
         if request.user in user.followers.all():
             user.followers.remove(request.user)
+            is_followed = False
         else:
             user.followers.add(request.user)
+            is_followed = True
+        context = {
+            "is_followed": is_followed,
+            "followings_count": user.followings.count(),
+            "followers_count": user.followers.count(),
+        }
+        return JsonResponse(context)
 
-    return redirect("account:detail", pk)
+    return redirect("accounts:detail", pk)

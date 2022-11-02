@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+<div class="my-2">
+  <span><b>"{{ query }}"</b>의 검색결과</span>
+</div>
+<!-- 유저 -->
+<div class="container my-3">
+  <div class="row mx-auto">
+    <span class="mb-3">유저</span>
+    {% for user in user %}
+    <div class="col-9 col-sm-12 col-md-4 col-md-12 col-lg-4">
+      <div class="card text-center" style="min-width: 18rem;">
+        <a href="{{ user.get_url }}" class="text-decoration-none text-dark">
+          <h5>{{ user.username }}</h5>
+        </a>
+        <div class="card-body">
+          <p>{{ user.nickname }}</p>
+        </div>
+      </div>
+    </div>
+    {% empty %}
+    <div class="row mx-auto">
+      <p>검색 결과가 없습니다.</p>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+<!-- 리뷰 -->
+<div class="container my-3">
+  <div class="row mx-auto">
+    <span class="mb-3">리뷰</span>
+    {% for review in review %}
+    <div class="col-9 col-sm-12 col-md-4 col-md-12 col-lg-4">
+      <div class="card text-center" style="min-width: 18rem;">
+        <a href="{{ review.get_url }}" class="text-decoration-none text-dark">
+          <h5>{{ review.title }}</h5>
+        </a>
+        <div class="card-body">
+          <p>{{ review.content }}</p>
+        </div>
+      </div>
+    </div>
+    {% empty %}
+    <div class="row mx-auto">
+      <p>검색 결과가 없습니다.</p>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+<!-- 영화 -->
+<div class="container my-3">
+  <div class="row mx-auto">
+    <span class="mb-3">영화</span>
+    {% for movie in movie %}
+    <div class="col-9 col-sm-12 col-md-4 col-md-12 col-lg-4">
+      <div class="card text-center" style="min-width: 18rem;">
+        <a href="{{ movie.get_url }}" class="text-decoration-none text-dark">
+          <h5>{{ movie.title }}</h5>
+        </a>
+        <div class="card-body">
+          <p>{{ movie.content }}</p>
+          <p>{{ movie.producer }}</p>
+        </div>
+      </div>
+    </div>
+    {% empty %}
+    <div class="row mx-auto">
+      <p>검색 결과가 없습니다.</p>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock content %}
