@@ -3,6 +3,7 @@ from .forms import MovieForm, ReviewForm, CommentForm
 from .models import Movie, Review, Comment
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.http import JsonResponse
 
 def index(request):
     context = {
@@ -136,9 +137,15 @@ def like(request, review_pk):
     review = get_object_or_404(Review, pk=review_pk)
     if review.like_users.filter(pk=request.user.pk).exists():
         review.like_users.remove(request.user)
+        isLiked = False
     else:
         review.like_users.add(request.user)
-    return redirect('reviews:review_detail', review_pk)
+        isLiked = True
+    context = {
+        'isLiked':isLiked,
+        'likeCount':review.like_users.count(),
+    }
+    return JsonResponse(context)
 
 def comment_like(request, comment_pk):
     comment = get_object_or_404(Comment, pk=comment_pk)
