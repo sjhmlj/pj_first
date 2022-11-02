@@ -2,14 +2,63 @@
 {% load django_bootstrap5 %}
 {% load static %}
 {% block content %}
+  <div class='row mt-5'>
+    <div class='col-3 px-3 pt-3'>
+      <h3 class="text-bg-secondary p-3 text-center rounded">
+        <a href="{% url 'accounts:detail' user.pk %}" style="text-decoration:none; color:white;">설정</a>
+      </h3>
+      <ul class='list-group'>
+        <li class='pt-2 list-group-item'>
+          <a href="{% url 'accounts:profile_update' %}" style="text-decoration:none; color:black;">프로필 변경</a>
+        </li>
+        <li class='pt-2 list-group-item'>
+          <a href="{% url 'accounts:password_update' %}" style="text-decoration:none; color:black;">비밀번호 변경</a>
+        </li>
+        <li class='pt-2 list-group-item'>
+          <!-- 탈퇴하기는 모달을 띄움 -->
+          <a type="button" class="" data-bs-toggle="modal" data-bs-target="#quitModal" style="text-decoration:none; color:black;">
+            탈퇴하기
+          </a>
+          <!-- 탈퇴 Modal -->
+          <div class="modal fade" id="quitModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header text-center">
+                  <div class="text-center w-100">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">탈퇴하기</h1>
+                  </div>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                  사용자의 모든 정보가 사라집니다.
+                  <br>정말 탈퇴하시겠습니까?
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                  <a href="{% url 'accounts:delete' %}" class="btn btn-danger">탈퇴</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="col-9">
 
-  {% if request.path_info == '/accounts/profile_update/' %}
-    <form action="{% url 'accounts:profile_update'%}" method="POST" enctype='multipart/form-data'>
-    {% else %}
-      <form action="{% url 'accounts:password_update'%}" method="POST">
-      {% endif %}
-      {% csrf_token %}
-      {% bootstrap_form form%}
-      <input type="submit" class="btn btn-primary">
-    </form>
-  {% endblock content %}
+      {% if request.path_info == '/accounts/profile_update/' %}
+        <form action="{% url 'accounts:profile_update'%}" method="POST" enctype='multipart/form-data'>
+        {% else %}
+          <form action="{% url 'accounts:password_update'%}" method="POST">
+          {% endif %}
+          {% csrf_token %}
+          {% bootstrap_form form%}
+          <input type="submit" class="btn btn-primary">
+        </form>
+
+      </div>
+
+    </div>
+
+  </div>
+
+{% endblock content %}

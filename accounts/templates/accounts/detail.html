@@ -2,55 +2,97 @@
 {% load django_bootstrap5 %}
 {% load static %}
 {% block content %}
+  <div class='row mt-5'>
+    <div class='col-3 px-3 pt-3'>
+      <h3 class="text-bg-secondary p-3 text-center rounded">
+        <a href="{% url 'accounts:detail' user.pk %}" style="text-decoration:none; color:white;">설정</a>
+      </h3>
+      <ul class='list-group'>
+        <li class='pt-2 list-group-item'>
+          <a href="{% url 'accounts:profile_update' %}" style="text-decoration:none; color:black;">프로필 변경</a>
+        </li>
+        <li class='pt-2 list-group-item'>
+          <a href="{% url 'accounts:password_update' %}" style="text-decoration:none; color:black;">비밀번호 변경</a>
+        </li>
+        <li class='pt-2 list-group-item'>
+          <!-- 탈퇴하기는 모달을 띄움 -->
+          <a type="button" class="" data-bs-toggle="modal" data-bs-target="#quitModal" style="text-decoration:none; color:black;">
+            탈퇴하기
+          </a>
+          <!-- 탈퇴 Modal -->
+          <div class="modal fade" id="quitModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header text-center">
+                  <div class="text-center w-100">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">탈퇴하기</h1>
+                  </div>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                  사용자의 모든 정보가 사라집니다.
+                  <br>정말 탈퇴하시겠습니까?
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                  <a href="{% url 'accounts:delete' %}" class="btn btn-danger">탈퇴</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class='col-9'>
+      <div class="mt-4">
 
-  <div>
-    {% if user.profile_image %}
+        <div class='d-flex'>
 
-      <img src="{{ user.profile_image.url }}" alt="{{ user.profile_image }}">
-    {% else %}
-      <img src="{% static '/images/profile_images/no-avatar.png' %}" alt="profile_image">
+          {% if user.profile_image %}
 
-    {% endif %}
-  </div>
-  <div>
-    {{user.nickname}}
-  </div>
-  <div>
-    팔로워 수:
-    <span id="followers">{{user.followers.all|length}}</span>
-    || 팔로잉 수:
-    <span id="followings">{{user.followings.all|length}}</span>
-    ||
-    {% if request.user != user %}
-      <form id="follow-form" data-user-id="{{ user.pk }}">
-        {% csrf_token %}
-        {% if request.user in user.followers.all %}
-          <input type="submit" value="언팔로우" class="btn btn-primary">
-        {% else %}
-          <input type="submit" value="팔로우" class="btn btn-primary">
-        {% endif %}
-      </form>
-    {% endif %}
-  </div>
-  <div>
-    작성한 리뷰 수:
-    {{reviews_number}}
+            <img src="{{ user.profile_image.url }}" alt="{{ user.profile_image }}" class="rounded-circle border border-light">
+          {% else %}
+            <img src="{% static '/images/profile_images/no-avatar.png' %}" alt="no-avatar" class="rounded-circle border border-light">
 
-  </div>
+          {% endif %}
+          <div class='px-5 pt-3'>
+            <h4>
+              {{user.nickname}}님
+            </h4>
+            {% if user.email %}
+              <div>{{user.email}}</div>
+            {% else %}
+              <div>no email</div>
+            {% endif %}
+            <div>
+              팔로워
+              <span id="followers">{{user.followers.all|length}}</span>
+              | 팔로잉
+              <span id="followings">{{user.followings.all|length}}</span>
 
-  <div>
-    {% if user == request.user %}
-      <a href="{% url 'accounts:profile_update' %}">회원정보 수정</a>
-      <a href="{% url 'accounts:password_update' %}">비밀번호 수정</a>
-    {% endif %}
-  </div>
-  {% if messages %}
-    {% for message in messages %}
-      <div class="alert alert-{{ message.tags }}">
-        {{ message }}
+              <div>
+                작성한 리뷰 수:
+                {{reviews_number}}
+
+              </div>
+            </div>
+          </div>
+          <div class='mt-5'>
+            {% if request.user != user %}
+              <form id="follow-form" data-user-id="{{ user.pk }}">
+                {% csrf_token %}
+                {% if request.user in user.followers.all %}
+                  <input type="submit" value="언팔로우" class="btn btn-primary">
+                {% else %}
+                  <input type="submit" value="팔로우" class="btn btn-primary">
+                {% endif %}
+              </form>
+            {% endif %}
+          </div>
+        </div>
       </div>
-    {% endfor %}
-  {% endif %}
+    </div>
+  </div>
 {% endblock content %}
 {% block script %}
   <script>
