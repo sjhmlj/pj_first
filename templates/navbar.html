@@ -4,12 +4,14 @@
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
+    <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
       <ul class="navbar-nav">
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="{% url 'reviews:index' %}">Home</a>
         </li>
-        <li class="">
+      </ul>
+      <ul class="nav navbar-nav">
+        <li class="search_bar">
           <form class="d-flex">
             <input class="form-control mx-3" type="search" placeholder="Search" aria-label="Search">
             <button class="btn btn-outline-primary me-2" type="submit">Search</button>
@@ -17,7 +19,7 @@
         </li>
         {% if request.user.is_authenticated %}
           <li class="nav-item">
-            <a class="nav-link me-2" href="{% url 'accounts:detail' request.user.pk %}">{{ request.user }}</a>
+            <a class="nav-link me-2" href="{% url 'accounts:detail' request.user.pk %}">{{ request.user.nickname }}</a>
           </li>
           <li class="nav-item">
             <a class="nav-link me-2" href="{% url 'accounts:logout' %}">로그아웃</a>
