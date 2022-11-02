@@ -8,13 +8,6 @@
     </button>
     <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
       <ul class="nav navbar-nav">
-        <li class="search_bar">
-          <form class="d-flex" action="{% url 'search:searchResult' %}" method="get">
-            {% csrf_token %}
-            <input class="form-control mx-3" type="search" placeholder="Search" aria-label="Search" name="q">
-            <button class="btn btn-outline-primary me-2" type="submit">Search</button>
-          </form>
-        </li>
         {% if request.user.is_authenticated %}
         <li class="nav-item">
           <a class="nav-link me-2" href="{% url 'accounts:detail' request.user.pk %}">{{ request.user.nickname }}</a>
@@ -35,6 +28,15 @@
           <a class="nav-link" href="{% url 'accounts:login' %}">로그인</a>
         </li>
         {% endif %}
+      </ul>
+      <ul class="nav navbar-nav my-2">
+        <li class="search_bar">
+          <form class="d-flex" action="{% url 'search:searchResult' %}" method="get">
+            {% csrf_token %}
+            <input class="form-control mx-3" type="search" placeholder="Search" aria-label="Search" name="q">
+            <button class="btn btn-outline-primary me-2" type="submit">Search</button>
+          </form>
+        </li>
       </ul>
     </div>
   </div>
