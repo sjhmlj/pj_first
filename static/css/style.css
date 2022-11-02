@@ -30,3 +30,8 @@
   justify-content: center;
   background-color: aliceblue;
 }
+
+.wrap {
+  min-height: 100%;
+  position: relative;
+}

@@ -19,9 +19,8 @@
   <style>
     body {
       font-family: 'Noto Sans KR', sans-serif;
-      position: relative;
-      min-height: 100%;
       padding-bottom: 80px;
+      height: 100%;
     }
   </style>
 </head>
@@ -29,6 +28,13 @@
 <body>
   <!-- navbar -->
   {% include "navbar.html" %}
+  {% if messages %}
+  {% for messages in messages %}
+  <div class="alert alert-{{ messages.tags }}">
+    { messages }}
+  </div>
+  {% endfor %}
+  {% endif %}
   <div class='container my-5'>
     {% block content %}{% endblock content %}
   </div>
@@ -63,7 +69,8 @@
         scrollTop: 0
       }, 500);
       return false;
-      });
     });
-  </script>
+  });
+</script>
+
 </html>
