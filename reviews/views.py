@@ -12,7 +12,7 @@ def index(request):
 
 @login_required
 def movie_create(request):
-    if request.user.is_superuser == 1:
+    if request.user.is_superuser:
         if request.method == "POST":
             movie_form = MovieForm(request.POST, request.FILES)
             if movie_form.is_valid():
@@ -30,8 +30,8 @@ def movie_create(request):
         messages.warning(request, '관리자 권한입니다.')
         return redirect('reviews:index')
 
-def movie_detail(request, pk):
-    movie = get_object_or_404(Movie, pk=pk)
+def movie_detail(request, movie_pk):
+    movie = get_object_or_404(Movie, pk=movie_pk)
     context = {
         'movie': movie,
         'reviews': movie.review_set.all(),
@@ -39,14 +39,14 @@ def movie_detail(request, pk):
     return render(request, 'reviews/movie_detail.html', context)
 
 @login_required
-def movie_update(request, pk):
-    if request.user.is_superuser == 1:
-        movie = get_object_or_404(Movie, pk=pk)
+def movie_update(request, movie_pk):
+    if request.user.is_superuser:
+        movie = get_object_or_404(Movie, pk=movie_pk)
         if request.method == "POST":
             form = MovieForm(request.POST, request.FILES, instance=movie)
             if form.is_valid():
                 form.save()
-                return redirect('reviews:movie_detail', pk)
+                return redirect('reviews:movie_detail', movie_pk)
         else:
             form = MovieForm(instance=movie)
         context = {
@@ -58,8 +58,8 @@ def movie_update(request, pk):
         return redirect('reviews:index')
 
 @login_required
-def review_create(request, pk):
-    movie = get_object_or_404(Movie, pk=pk)
+def review_create(request, movie_pk):
+    movie = get_object_or_404(Movie, pk=movie_pk)
     if request.method == 'POST':
         review_form = ReviewForm(request.POST)
         if review_form.is_valid():
@@ -68,7 +68,7 @@ def review_create(request, pk):
             form.user = request.user
             form.save()
             messages.success(request, '리뷰가 등록되었습니다.')
-            return redirect('reviews:movie_detail', pk)
+            return redirect('reviews:movie_detail', movie_pk)
     else:
         review_form = ReviewForm()
     context = {
@@ -77,7 +77,7 @@ def review_create(request, pk):
     return render(request, 'reviews/review_create.html', context)
 
 @login_required
-def review_detail(request, movie_pk, review_pk):
+def review_detail(request, review_pk):
     review = get_object_or_404(Review, pk=review_pk)
     context = {
         'review': review,
@@ -87,14 +87,14 @@ def review_detail(request, movie_pk, review_pk):
     return render(request, 'reviews/review_detail.html', context)
 
 @login_required
-def review_update(request, movie_pk, review_pk):
+def review_update(request, review_pk):
     review = get_object_or_404(Review, pk=review_pk)
     if request.method == 'POST' and review.user == request.user:
         review_form = ReviewForm(request.POST, instance=review)
         if review_form.is_valid():
             review_form.save()
             messages.success(request, '수정되었습니다.')
-            return redirect('reviews:review_detail', movie_pk, review.pk)
+            return redirect('reviews:review_detail', review.pk)
     else:
         review_form = ReviewForm(instance=review)
     context = {
@@ -113,7 +113,7 @@ def review_delete(request, movie_pk, review_pk):
     return redirect('reviews:movie_detail', movie_pk)
 
 @login_required
-def comment_create(request, movie_pk, review_pk):
+def comment_create(request, review_pk):
     review = get_object_or_404(Review, pk=review_pk)
     if request.method == "POST":
         comment_form = CommentForm(request.POST)
@@ -122,21 +122,28 @@ def comment_create(request, movie_pk, review_pk):
             form.user = request.user
             form.review = review
             form.save()
-            return redirect('reviews:review_detail', movie_pk, review_pk)
+            return redirect('reviews:review_detail', review_pk)
 
 @login_required
-def comment_delete(request, movie_pk, review_pk, comment_pk):
+def comment_delete(request, review_pk, comment_pk):
     comment = get_object_or_404(Comment, pk=comment_pk)
     if request.method == "POST" and comment.user == request.user:
         comment.delete()
-    return redirect('reviews:review_detail', movie_pk, review_pk)
+    return redirect('reviews:review_detail', review_pk)
 
 @login_required
-def like(request, movie_pk, review_pk):
+def like(request, review_pk):
     review = get_object_or_404(Review, pk=review_pk)
     if review.like_users.filter(pk=request.user.pk).exists():
         review.like_users.remove(request.user)
     else:
         review.like_users.add(request.user)
-    return redirect('reviews:review_detail', movie_pk, review_pk)
+    return redirect('reviews:review_detail', review_pk)
 
+def comment_like(request, comment_pk):
+    comment = get_object_or_404(Comment, pk=comment_pk)
+    if comment.like_users.filter(pk=request.user.pk).exists():
+        comment.like_users.remove(request.user)
+    else:
+        comment.like_users.add(request.user)
+    return redirect('reviews:review_detail', comment.review.pk)

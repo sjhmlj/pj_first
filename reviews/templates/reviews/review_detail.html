@@ -9,25 +9,28 @@
     {{ review.grade }}점 |
     {{ review.created_at }}</h5>
   <p>{{ review.content }}</p>
-  <p>좋아요 :
-    {{ review.like_users.count }}개</p>
   {% if request.user.is_authenticated %}
-    <a href="{% url 'reviews:like' review.movie.pk review.pk %}">
-      {% if request.user in review.like_users.all %}
-        좋아요 취소
-      {% else %}
-        좋아요
-      {% endif %}
-    </a>
+    <div class="d-flex justify-content-center">
+      <div class="border rounded p-2">
+        <a class="text-decoration-none" href="{% url 'reviews:like' review.pk %}">
+          {% if request.user in review.like_users.all %}
+            <i class="bi bi-suit-heart-fill text-danger fs-2"></i>
+          {% else %}
+            <i class="bi bi-suit-heart text-danger fs-2"></i>
+          {% endif %}
+        </a>
+        <span class="text-center fs-2 ms-2">{{ review.like_users.count }}</span>
+      </div>
+    </div>
     {% if review.user == request.user %}
-      <a href="{% url 'reviews:review_update' review.movie.pk review.pk %}">수정</a>
+      <a href="{% url 'reviews:review_update' review.pk %}">수정</a>
       <form action="{% url 'reviews:review_delete' review.movie.pk review.pk %}">
         {% csrf_token %}
         <input type="submit">
       </form>
     {% endif %}
   {% endif %}
-  <form action="{% url 'reviews:comment_create' review.movie.pk review.pk %}" method="POST">
+  <form action="{% url 'reviews:comment_create' review.pk %}" method="POST">
     {% csrf_token %}
     {% bootstrap_form comment_form %}
     <input type="submit">
@@ -37,9 +40,20 @@
     <div class='d-flex align-items-center'>
       <p class='my-0'>{{ comment.user }}
         |
-        {{ comment.created_at }}</p>
+        {{ comment.created_at }}
+        {% if request.user.is_authenticated %}
+          <a class="text-decoration-none" href="{% url 'reviews:comment_like' comment.pk %}">
+            {% if request.user in comment.like_users.all %}
+              <i class="bi bi-hand-thumbs-up-fill"></i>
+            {% else %}
+              <i class="bi bi-hand-thumbs-up"></i>
+            {% endif %}
+          </a>
+          <span>{{ comment.like_users.count }}</span>
+        {% endif %}
+      </p>
       {% if comment.user == request.user %}
-        <form action="{% url 'reviews:comment_delete' review.movie.pk review.pk comment.pk %}" method="POST">
+        <form action="{% url 'reviews:comment_delete' review.pk comment.pk %}" method="POST">
           {% csrf_token %}
           <input class='btn text-danger' type="submit" value='삭제'>
         </form>
