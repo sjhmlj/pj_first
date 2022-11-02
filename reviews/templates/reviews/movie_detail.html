@@ -5,13 +5,13 @@
   <h1>{{ movie.pk }}
     번째 영화</h1>
   <div class="d-flex justify-content-between">
-
     <h3>{{ movie.title }}
       |
       {{ movie.producer }}
       |
       {{ movie.opening_date }}</h3>
     {% if request.user.is_superuser %}
+      <!-- 로그인한 사람이 관리자이면 수정 버튼 생성 -->
       <a href="{% url 'reviews:movie_update' movie.pk %}">수정</a>
     {% endif %}
   </div>
