@@ -1,12 +1,10 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container-fluid mx-5 d-flex">
-    <a class="navbar-brand" href="{% url 'reviews:index' %}"
-      style="color: red; font-size: 25px; font-weight: bold;">EutCha!</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <a class="navbar-brand" href="{% url 'reviews:index' %}" style="color: red; font-size: 25px; font-weight: bold;">EutCha!</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
       <ul class="nav navbar-nav">
         <li class="search_bar">
           <form class="d-flex" action="{% url 'search:searchResult' %}" method="get">
@@ -16,24 +14,24 @@
           </form>
         </li>
         {% if request.user.is_authenticated %}
-        <li class="nav-item">
-          <a class="nav-link me-2" href="{% url 'accounts:detail' request.user.pk %}">{{ request.user.nickname }}</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link me-2" href="{% url 'accounts:logout' %}">로그아웃</a>
-        </li>
-        {% if request.user.is_superuser %}
-        <li class="nav-item">
-          <a class="nav-link me-2" href="{% url 'reviews:movie_create' %}">영화등록(임시)</a>
-        </li>
-        {% endif %}
+          <li class="nav-item">
+            <a class="nav-link me-2" href="{% url 'accounts:detail' request.user.pk %}">{{ request.user.nickname }}</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link me-2" href="{% url 'accounts:logout' %}">로그아웃</a>
+          </li>
+          {% if request.user.is_superuser %}
+            <li class="nav-item">
+              <a class="nav-link me-2" href="{% url 'reviews:movie_create' %}">영화등록(임시)</a>
+            </li>
+          {% endif %}
         {% else %}
-        <li class="nav-item">
-          <a class="nav-link me-2" href="{% url 'accounts:signup' %}">회원가입</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'accounts:login' %}">로그인</a>
-        </li>
+          <li class="nav-item">
+            <a class="nav-link me-2" href="{% url 'accounts:signup' %}">회원가입</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'accounts:login' %}">로그인</a>
+          </li>
         {% endif %}
       </ul>
     </div>

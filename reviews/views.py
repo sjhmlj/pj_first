@@ -4,6 +4,7 @@ from .models import Movie, Review, Comment
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import JsonResponse
+from django.db.models import Avg
 
 def index(request):
     context = {
@@ -36,6 +37,7 @@ def movie_detail(request, movie_pk):
     context = {
         'movie': movie,
         'reviews': movie.review_set.all(),
+        'total' : Review.objects.aggregate(review_avg=Avg('grade')),
     }
     return render(request, 'reviews/movie_detail.html', context)
 
@@ -94,7 +96,9 @@ def review_update(request, review_pk):
     if request.method == 'POST' and review.user == request.user:
         review_form = ReviewForm(request.POST, instance=review)
         if review_form.is_valid():
-            review_form.save()
+            form = review_form.save(commit=False)
+            form.grade = request.POST.get('grade')
+            form.save()
             messages.success(request, '수정되었습니다.')
             return redirect('reviews:review_detail', review.pk)
     else:
