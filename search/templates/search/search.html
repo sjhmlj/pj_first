@@ -42,10 +42,12 @@
       <div class="card" style="width: 16rem;">
         <a href="{% url 'reviews:review_detail' review.pk %}" class="text-decoration-none text-dark mx-3 mt-2">
           <h5 class="card-title">{{ review.title }}</h5>
-          <h6 class="card-subtitle mb-2 text-muted">{{ review.created_at | date:'Y-m-d' }}</h6>
+          <h6 class="card-subtitle mb-2 text-muted">
+            {{ review.created_at | date:'Y-m-d' }} | ★ {{ review.grade }}
+          </h6>
         </a>
         <div class="card-body">
-          <p class="card-text">{{ review.content }}</p>
+          <p class="card-text text-truncate">{{ review.content }}</p>
         </div>
       </div>
     </div>
@@ -66,10 +68,12 @@
         <a href="{% url 'reviews:movie_detail' movie.pk %}" class="text-decoration-none text-dark">
           <img src="{{ movie.image.url }}" alt="{{ movie.title }}" class="card-img-top mb-2">
           <h5 class="card-title mx-3">{{ movie.title }}</h5>
-          <h6 class="card-subtitle mb-2 mx-3 text-muted">{{ movie.opening_date | date:'Y' }}</h6>
+          <h6 class="card-subtitle mb-2 mx-3 text-muted">
+            {{ movie.opening_date | date:'Y' }} | {{ movie.producer }}
+          </h6>
         </a>
         <div class="card-body">
-          <p class="card-text">{{ movie.producer }}</p>
+          <p class="card-text text-truncate">{{ movie.content }}</p>
         </div>
       </div>
     </div>
