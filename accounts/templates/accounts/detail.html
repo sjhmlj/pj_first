@@ -37,11 +37,24 @@
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-                    <a href="{% url 'accounts:delete' %}" class="btn btn-danger">탈퇴</a>
+
+                    <form action="{% url 'accounts:delete' %}" method="POST">
+                      {% csrf_token %}
+                      <input type="submit" class="btn btn-danger" value="탈퇴">
+                    </form>
                   </div>
                 </div>
               </div>
             </div>
+          </li>
+
+        </ul>
+        <h3 class="mt-5 text-bg-primary p-3 text-center rounded">
+          모음
+        </h3>
+        <ul class='list-group'>
+          <li class='pt-2 list-group-item'>
+            <a href="{% url 'accounts:reviews' user.pk %}" style="text-decoration:none; color:black;">리뷰 보기</a>
           </li>
         </ul>
       </div>
