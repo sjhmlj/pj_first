@@ -61,6 +61,14 @@ def movie_update(request, movie_pk):
         return redirect('reviews:index')
 
 @login_required
+def movie_delete(request, movie_pk):
+    if request.user.is_superuser and request.method == "POST":
+        movie = get_object_or_404(Movie, pk=movie_pk)
+        movie.delete()
+        return redirect('reviews:index')
+            
+
+@login_required
 def review_create(request, movie_pk):
     movie = get_object_or_404(Movie, pk=movie_pk)
     if request.method == 'POST':

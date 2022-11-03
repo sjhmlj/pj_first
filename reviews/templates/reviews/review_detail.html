@@ -3,7 +3,7 @@
 {% load static %}
 {% block content %}
   <div class="d-flex">
-    <a class='border border-dark rounded bg-light' href="{% url 'reviews:movie_detail' review.movie.pk %}"><img class=' rounded p-1' src="{{ review.movie.image_sm.url }}" alt="{{ review.movie.image_sm }}"></a>
+    <a class='border border-dark rounded bg-light' href="{% url 'reviews:movie_detail' review.movie.pk %}"><img style='width:120px; height:160px;' class=' rounded p-1' src="{{ review.movie.image.url }}" alt="{{ review.movie.image }}"></a>
     <div class='w-100 ms-3'>
       <h1>{{ review.title }}
       </h1>

@@ -5,12 +5,16 @@
   <div class="d-flex justify-content-end">
     {% if request.user.is_superuser %}
       <!-- 로그인한 사람이 관리자이면 수정 버튼 생성 -->
-      <a href="{% url 'reviews:movie_update' movie.pk %}">수정</a>
+      <a class='btn btn-outline-dark btn-sm' href="{% url 'reviews:movie_update' movie.pk %}">수정</a>
+      <form class='mx-2' action="{% url 'reviews:movie_delete' movie.pk %}" method="POST">
+        {% csrf_token %}
+        <input class='btn btn-outline-dark btn-sm' type="submit" value='삭제'>
+      </form>
     {% endif %}
   </div>
-  <div class="d-flex my-2">
+  <div class="d-flex my-2 bg-light rounded p-4">
     <img class='rounded' src="{{ movie.image.url }}" alt="{{ movie.image }}">
-    <div class='d-flex flex-column justify-content-center mx-3'>
+    <div class='d-flex flex-column justify-content-center mx-5'>
       <h2>{{ movie.title }}
         <span class='fs-4 text-secondary'>({{ movie.opening_date.year }})</span>
         <span class='fs-6'>
@@ -28,29 +32,40 @@
       </div>
     </div>
   </div>
-  <div class='d-flex justify-content-between mt-5'>
-    <h3>리뷰 목록</h3>
-    <a class='btn btn-outline-dark' href="{% url 'reviews:review_create' movie.pk %}">리뷰 작성</a>
-  </div>
-  <div>
-    <div class="row text-center fs-5 fw-bold my-3">
-      <div class="col-6">리뷰제목</div>
-      <div class="col-3">작성자</div>
-      <div class="col-3">작성시간</div>
-    </div>
-    <hr>
-    {% for review in reviews %}
-      <div class="row text-center">
-        <div class="col-6">
-          <a href="{% url 'reviews:review_detail' review.pk %}">{{ review.title }}</a>
-        </div>
-        <div class="col-3">
-          <a href="{% url 'accounts:detail' review.user.pk %}">{{ review.user.nickname }}</a>
-        </div>
-        <div class="col-3">{{ review.created_at }}
-        </div>
+  <div class='rounded bg-light p-4 mt-4'>
+    <div class='d-flex justify-content-between mb-3'>
+      <h3>리뷰 목록 ({{ reviews.count }})</h3>
+      <div>
+        <a class='btn btn-outline-dark btn-sm' href="{% url 'reviews:review_create' movie.pk %}">리뷰 작성</a>
       </div>
-      <hr>
-    {% endfor %}
+    </div>
+    <div class='row'>
+      {% for review in reviews %}
+        <div class="col-4">
+          <a class='text-decoration-none text-dark' href="{% url 'reviews:review_detail' review.pk %}">
+            <div class="card">
+              <div class="card-header">
+                <img style='width:1.5rem; hegiht:1.5rem;' class='rounded-circle' src="{{ review.user.profile_image.url }}" alt="{{ review.user.profile_image }}">
+                <span class='mx-1 fw-bold'>{{ review.user.nickname }}</span>
+              </div>
+              <div class="card-body">
+                <h5 class="card-title m-0">{{ review.title }}</h5>
+              </div>
+              <div style='font-size:0.8rem;' class='text-secondary card-footer'>
+                {{ review.created_at }}
+                <span class='mx-1'>
+                  <i class="bi bi-suit-heart-fill text-danger"></i>
+                  {{ review.like_users.count }}
+                </span>
+                <span class='mx-1'>
+                  댓글
+                  {{ review.comment_set.count }}
+                </span>
+              </div>
+            </div>
+          </a>
+        </div>
+      {% endfor %}
+    </div>
   </div>
 {% endblock content %}
