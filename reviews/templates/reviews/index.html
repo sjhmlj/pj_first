@@ -2,18 +2,91 @@
 {% load static %}
 {% load django_bootstrap5 %}
 {% block content %}
+  <h1>index</h1>
   <!-- 영화 리스트 -->
-  <div class="row">
-    {% for movie in movies %}
-      <!-- 영화포스터이미지에 링크 -->
-      <div class='col-3 my-2'>
-        <div class='card'>
-          <a href="{% url 'reviews:movie_detail' movie.pk %}"><img class='card-img-top rounded' src="{{ movie.image.url }}" alt="{{ movie.image }}"></a>
-          <div class='card=body'>
-            <h5 class='card-title text-center fst-italic'>{{ movie.title }}</h3>
-          </div>
+
+  <div class="container text-center my-3">
+    <h2 class="font-weight-light">Movies</h2>
+    <div class="row  justify-content-center">
+      <div id="recipeCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner" role="listbox">
+          {% for movie in movies %}
+            <div class="carousel-item {% if forloop.counter == 1 %}active{% endif %} ">
+              <div class='col-3 p-4 mx-1 my-2'>
+                <div class='card'>
+                  <a href="{% url 'reviews:movie_detail' movie.pk %}"><img class='card-img-top rounded' src="{{ movie.image.url }}" alt="{{ movie.image }}"></a>
+                  <div class='card=body'>
+                    <h5 class='card-title text-center fst-italic'>{{ movie.title }}</h3>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+
         </div>
+        <a class="carousel-control-prev bg-transparent w-aut" href="#recipeCarousel" role="button" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        </a>
+        <a class="carousel-control-next bg-transparent w-aut" href="#recipeCarousel" role="button" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        </a>
       </div>
-    {% endfor %}
+    </div>
+
   </div>
+
+  <style>
+    @media (max-width: 767px) {
+      .carousel-inner .carousel-item > div {
+        display: none;
+      }
+
+      .carousel-inner .carousel-item > div:first-child {
+        display: block;
+      }
+    }
+
+    .carousel-inner .carousel-item-next,
+    .carousel-inner .carousel-item-prev,
+    .carousel-inner .carousel-item.active {
+      display: flex;
+    }
+
+    /* medium and up screens */
+    @media (min-width: 768px) {
+
+      .carousel-inner .carousel-item-end.active,
+      .carousel-inner .carousel-item-next {
+        transform: translateX(25%);
+      }
+
+      .carousel-inner .carousel-item-prev,
+      .carousel-inner .carousel-item-start.active {
+        transform: translateX(-25%);
+      }
+    }
+
+    .carousel-inner .carousel-item-end,
+    .carousel-inner .carousel-item-start {
+      transform: translateX(0);
+    }
+  </style>
+
+  <script>
+    let items = document.querySelectorAll('.carousel .carousel-item')
+
+    items.forEach((el) => {
+      const minPerSlide = 4
+      let next = el.nextElementSibling
+      for (var i = 1; i < minPerSlide; i++) {
+        if (!next) {
+          // wrap carousel by using first child
+          next = items[0]
+        }
+        let cloneChild = next.cloneNode(true)
+        el.appendChild(cloneChild.children[0])
+        next = next.nextElementSibling
+      }
+    })
+  </script>
 {% endblock content %}

@@ -37,7 +37,7 @@ def movie_detail(request, movie_pk):
     context = {
         'movie': movie,
         'reviews': movie.review_set.all(),
-        'total' : Review.objects.aggregate(review_avg=Avg('grade')),
+        'total' : movie.review_set.aggregate(review_avg=Avg('grade')),
     }
     return render(request, 'reviews/movie_detail.html', context)
 

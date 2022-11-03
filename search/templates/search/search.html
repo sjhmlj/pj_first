@@ -2,75 +2,72 @@
 {% load django_bootstrap5 %}
 
 {% block content %}
-<div class="my-2">
-  <span><b>"{{ query }}"</b>의 검색결과</span>
-</div>
-<!-- 유저 -->
-<div class="container my-3">
-  <div class="row mx-auto">
-    <span class="mb-3">유저</span>
-    {% for user in user %}
-    <div class="col-9 col-sm-12 col-md-4 col-md-12 col-lg-4">
-      <div class="card text-center" style="min-width: 10rem;">
-        <a href="{% url 'accounts:detail' user.pk %}" class="text-decoration-none text-dark">
-          <h5>{{ user.username }}</h5>
-        </a>
-        <div class="card-body">
-          <p>{{ user.nickname }}</p>
-        </div>
-      </div>
-    </div>
-    {% empty %}
-    <div class="row mx-auto">
-      <p>검색 결과가 없습니다.</p>
-    </div>
-    {% endfor %}
+  <div class="my-2">
+    <span>
+      <b>"{{ query }}"</b>의 검색결과</span>
   </div>
-</div>
-<!-- 리뷰 -->
-<div class="container my-3">
-  <div class="row mx-auto">
-    <span class="mb-3">리뷰</span>
-    {% for review in review %}
-    <div class="col-9 col-sm-12 col-md-4 col-md-12 col-lg-4">
-      <div class="card text-center" style="min-width: 10rem;">
-        <a href="{% url 'reviews:review_detail' review_pk %}" class="text-decoration-none text-dark">
-          <h5>{{ review.title }}</h5>
-        </a>
-        <div class="card-body">
-          <p>{{ review.content }}</p>
-        </div>
-      </div>
-    </div>
-    {% empty %}
+  <!-- 유저 -->
+  <div class="container my-3">
     <div class="row mx-auto">
-      <p>검색 결과가 없습니다.</p>
-    </div>
-    {% endfor %}
-  </div>
-</div>
-<!-- 영화 -->
-<div class="container my-3">
-  <div class="row mx-auto">
-    <span class="mb-3">영화</span>
-    {% for movie in movie %}
-    <div class="col-9 col-sm-12 col-md-4 col-md-12 col-lg-4">
-      <div class="card text-center" style="min-width: 10rem;">
-        <a href="{{ movie.get_url }}" class="text-decoration-none text-dark">
-          <img src="{% url 'reviews.movie_detail' movie_pk %}" alt="{{ movie.title }}">
-          <h5>{{ movie.title }}</h5>
-        </a>
-        <div class="card-body">
-          <p>{{ movie.content }}</p>
-          <p>{{ movie.producer }}</p>
+      <span class="mb-3">유저</span>
+      {% for user in user %}
+        <div class="col-9 col-sm-12 col-md-4 col-md-12 col-lg-4">
+          <div class="card text-center" style="min-width: 10rem;">
+            <a href="{% url 'accounts:detail' user.pk %}" class="text-decoration-none text-dark">
+              <h5>{{ user.username }}</h5>
+            </a>
+            <div class="card-body">
+              <p>{{ user.nickname }}</p>
+            </div>
+          </div>
         </div>
-      </div>
+        {% empty %}
+        <div class="row mx-auto">
+          <p>검색 결과가 없습니다.</p>
+        </div>
+      {% endfor %}
     </div>
-    {% empty %}
-    <div class="row mx-auto">
-      <p>검색 결과가 없습니다.</p>
-    </div>
-    {% endfor %}
   </div>
-</div>
+  <!-- 리뷰 -->
+  <div class="container my-3">
+    <div class="row mx-auto">
+      <span class="mb-3">리뷰</span>
+      {% for review in review %}
+        <div class="col-9 col-sm-12 col-md-4 col-md-12 col-lg-4">
+          <div class="card text-center" style="min-width: 10rem;">
+            <a href="{% url 'reviews:review_detail' review.pk %}" class="text-decoration-none text-dark">
+              <h5>{{ review.title }}</h5>
+            </a>
+            <div class="card-body">
+              <p>{{ review.content }}</p>
+            </div>
+          </div>
+        </div>
+        {% empty %}
+        <div class="row mx-auto">
+          <p>검색 결과가 없습니다.</p>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+  <!-- 영화 -->
+  <div class="container my-3">
+    <div class="row mx-auto">
+      <span class="mb-3">영화</span>
+      {% for movie in movie %}
+        <div class="col-9 col-sm-12 col-md-4 col-md-12 col-lg-4">
+          <div class="card text-center" style="min-width: 10rem;">
+            <a href="{% url 'reviews:movie_detail' movie.pk %}" class="text-decoration-none text-dark">
+              <img src="{{ movie.image.url }}" alt="{{ movie.image }}">
+              <h5>{{ movie.title }}</h5>
+            </a>
+          </div>
+        </div>
+        {% empty %}
+        <div class="row mx-auto">
+          <p>검색 결과가 없습니다.</p>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
 {% endblock content %}

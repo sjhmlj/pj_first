@@ -1,6 +1,6 @@
 from django.db import models
 from imagekit.models import ProcessedImageField
-from imagekit.processors import Thumbnail
+from imagekit.processors import Thumbnail, ResizeToFit
 from django.contrib.auth import get_user_model
 from django.core.validators import MinValueValidator, MaxValueValidator
 
@@ -12,7 +12,8 @@ class Movie(models.Model):
     cast = models.TextField()
     producer = models.CharField(max_length=20)
     opening_date = models.DateField()
-    image = ProcessedImageField(blank=False, upload_to='images/', processors=[Thumbnail(300, 400)], format='JPEG', options={'quality':80})
+    image = ProcessedImageField(blank=True, upload_to='images/', processors=[Thumbnail(300, 400)], format='JPEG', options={'quality':80})
+    image_sm = ProcessedImageField(blank=True, upload_to='images/', processors=[ResizeToFit(90, 120)], format='JPEG', options={'quality':50})
 
 class Review(models.Model):
     title = models.CharField(max_length=20)
