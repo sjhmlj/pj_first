@@ -8,6 +8,9 @@ from django.contrib.auth import get_user_model, update_session_auth_hash
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from reviews.models import Review
+from django.views.decorators.http import require_POST
+from django.http import JsonResponse
+from reviews.models import Review, Movie
 
 
 def signup(request):
@@ -98,6 +101,7 @@ def password_update(request):
 
 
 @login_required
+@require_POST
 def delete(request):
     try:
         request.user.delete()
@@ -107,9 +111,6 @@ def delete(request):
         messages.error(request, "error")
         return render(request, "reviews:index")
     return redirect("reviews:index")
-
-
-from django.http import JsonResponse
 
 
 @login_required
@@ -130,3 +131,13 @@ def follow(request, pk):
         return JsonResponse(context)
 
     return redirect("accounts:detail", pk)
+
+
+def reviews(request, pk):
+    user = get_object_or_404(get_user_model(), id=pk)
+    reviews = Review.objects.filter(user=user)
+    context = {
+        "reviews": reviews,
+        "user": user,
+    }
+    return render(request, "accounts/reviews.html", context)
