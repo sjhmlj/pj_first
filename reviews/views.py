@@ -4,7 +4,8 @@ from .models import Movie, Review, Comment
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import JsonResponse
-from django.db.models import Avg
+from django.db.models import Avg, Count
+
 
 def index(request):
     context = {
@@ -34,9 +35,10 @@ def movie_create(request):
 
 def movie_detail(request, movie_pk):
     movie = get_object_or_404(Movie, pk=movie_pk)
+    reviews = Review.objects.annotate(num_count=Count('like_users')).filter(movie=movie).order_by('-num_count')
     context = {
         'movie': movie,
-        'reviews': movie.review_set.all(),
+        'reviews': reviews,
         'total' : movie.review_set.aggregate(review_avg=Avg('grade')),
     }
     return render(request, 'reviews/movie_detail.html', context)
@@ -91,10 +93,18 @@ def review_create(request, movie_pk):
 @login_required
 def review_detail(request, review_pk):
     review = get_object_or_404(Review, pk=review_pk)
+    grade_list = []
+    none_grade_list = []
+    for grade_count in range(review.grade):
+        grade_list.append(1)
+    for grade_count in range(5 - review.grade):
+        none_grade_list.append(1)
     context = {
         'review': review,
         'comment_form': CommentForm(),
         'comments': review.comment_set.all(),
+        'grade_list':grade_list,
+        'none_grade_list':none_grade_list,
     }
     return render(request, 'reviews/review_detail.html', context)
 
@@ -136,12 +146,37 @@ def comment_create(request, review_pk):
             form.user = request.user
             form.review = review
             form.save()
-            return redirect('reviews:review_detail', review_pk)
+            comments = []
+            for a in review.comment_set.all():
+                if request.user in a.like_users.all():
+                    is_liked = True
+                else:
+                    is_liked = False
+                comment_like_user = a.like_users.count()
+                if request.user:
+                    islogin = True
+                else:
+                    islogin = False
+                comments.append([
+                    a.content, 
+                    a.user.nickname, 
+                    a.created_at, 
+                    a.user.id, 
+                    request.user.id, 
+                    a.id, 
+                    a.review.id, 
+                    is_liked, 
+                    comment_like_user, 
+                    islogin])
+            context = {
+                'comments':comments
+            }
+            return JsonResponse(context)
 
 @login_required
 def comment_delete(request, review_pk, comment_pk):
     comment = get_object_or_404(Comment, pk=comment_pk)
-    if request.method == "POST" and comment.user == request.user:
+    if comment.user == request.user:
         comment.delete()
     return redirect('reviews:review_detail', review_pk)
 

@@ -2,109 +2,119 @@
 {% load django_bootstrap5 %}
 {% load static %}
 {% block content %}
-  <div class="d-flex">
-    <a class='border border-dark rounded bg-light' href="{% url 'reviews:movie_detail' review.movie.pk %}"><img style='width:120px; height:160px;' class=' rounded p-1' src="{{ review.movie.image.url }}" alt="{{ review.movie.image }}"></a>
-    <div class='w-100 ms-3'>
-      <h1>{{ review.title }}
-      </h1>
-      <div class="d-flex justify-content-between">
-        <div>
-          <h5 class='text-secondary'>
-            {{ review.movie.title }}({{ review.movie.opening_date.year }})</h5>
-          <p>작성자:
-            <a href="{% url 'accounts:detail' review.user.pk %}">
-              {{ review.user }}</a>
-          </p>
-        </div>
-        <div>
-          <h5>평점 :
-            {{ review.grade }}/5점</h5>
-          <span class='text-secondary'>{{ review.created_at }}</span>
+  <div class='bg-light rounded p-3'>
+    <div class="d-flex">
+      <a class='border border-dark rounded bg-light' href="{% url 'reviews:movie_detail' review.movie.pk %}"><img style='width:120px; height:160px;' class=' rounded p-1' src="{{ review.movie.image.url }}" alt="{{ review.movie.image }}"></a>
+      <div class='w-100 ms-3'>
+        <h2>{{ review.title }}
+        </h2>
+        <div class="d-flex justify-content-between">
+          <div>
+            <h5 class='text-secondary m-0'>
+              {{ review.movie.title }}({{ review.movie.opening_date.year }})</h5>
+            <div>
+              {% for grade in grade_list %}
+                <i class="bi bi-star-fill text-warning"></i>
+              {% endfor %}
+              {% for grade in none_grade_list %}
+                <i class="bi bi-star text-warning"></i>
+              {% endfor %}
+            </div>
+            <p>작성자:
+              <a href="{% url 'accounts:detail' review.user.pk %}">
+                {{ review.user }}</a>
+            </p>
+          </div>
+          <div>
+            <span class='text-secondary'>{{ review.created_at }}</span>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-  <p style='height:10rem;' class='my-5'>{{ review.content }}</p>
-  {% if request.user.is_authenticated %}
-    <div class="d-flex justify-content-center">
-      <div class="d-flex align-items-center">
-        {% if request.user in review.like_users.all %}
-          <i id="like-btn" data-review-id="{{ review.pk }}" class="btn bi bi-suit-heart-fill text-danger fs-2 heart-button"></i>
-        {% else %}
-          <i id="like-btn" data-review-id="{{ review.pk }}" class="btn bi bi-suit-heart text-danger fs-2 heart-button"></i>
-        {% endif %}
+    <p style='height:10rem;' class='my-5'>{{ review.content }}</p>
+    {% if request.user.is_authenticated %}
+      <div class="d-flex justify-content-center">
+        <div class="d-flex align-items-center">
+          {% if request.user in review.like_users.all %}
+            <i id="like-btn" data-review-id="{{ review.pk }}" class="btn bi bi-suit-heart-fill text-danger fs-2 heart-button"></i>
+          {% else %}
+            <i id="like-btn" data-review-id="{{ review.pk }}" class="btn bi bi-suit-heart text-danger fs-2 heart-button"></i>
+          {% endif %}
+        </div>
       </div>
-    </div>
-    {% if review.user == request.user %}
-      <div class='d-flex justify-content-end'>
-        <a class='btn btn-outline-dark' href="{% url 'reviews:review_update' review.pk %}">수정</a>
-        <!-- Button trigger modal -->
-        <button type="button" class="mx-2 btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#exampleModal">
-          삭제
-        </button>
+      {% if review.user == request.user %}
+        <div class='d-flex justify-content-end'>
+          <a class='btn btn-outline-dark btn-sm' href="{% url 'reviews:review_update' review.pk %}">수정</a>
+          <!-- Button trigger modal -->
+          <button type="button" class="mx-2 btn btn-outline-dark btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            삭제
+          </button>
 
-        <!-- Modal -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">정말 삭제하시겠습니까?</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div class="modal-body">
-                삭제된 게시글은 복구할 수 없으며 관련된 댓글 또한 삭제됩니다.
-              </div>
-              <div class="modal-footer">
-                <form class='mx-2' action="{% url 'reviews:review_delete' review.movie.pk review.pk %}">
-                  {% csrf_token %}
-                  <input class='btn btn-outline-danger ' type="submit" value='삭제'>
-                </form>
-                <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">아니오</button>
+          <!-- Modal -->
+          <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="exampleModalLabel">정말 삭제하시겠습니까?</h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  삭제된 게시글은 복구할 수 없으며 관련된 댓글 또한 삭제됩니다.
+                </div>
+                <div class="modal-footer">
+                  <form class='mx-2' action="{% url 'reviews:review_delete' review.movie.pk review.pk %}">
+                    {% csrf_token %}
+                    <input class='btn btn-outline-danger ' type="submit" value='삭제'>
+                  </form>
+                  <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">아니오</button>
+                </div>
               </div>
             </div>
           </div>
         </div>
-
-      </div>
+      {% endif %}
     {% endif %}
-  {% endif %}
-  <form action="{% url 'reviews:comment_create' review.pk %}" method="POST">
-    {% csrf_token %}
-    <label sytle='font-size:0.7rem;' class='text-secondary my-2' for="content">좋아요
-      <span sytle='font-size:0.7rem;' id="like-count" class="text-center me-3">{{ review.like_users.count }}</span>&nbsp;&nbsp;&nbsp;&nbsp; 댓글
-      {{ comments.count }}</label>
-    {% bootstrap_form comment_form %}
-    <div class='d-flex justify-content-end'>
-      <input class='btn btn-outline-dark btn-sm' type="submit" value='등록'>
-    </div>
-  </form>
-  <hr>
-  {% for comment in comments %}
-    <div class='d-flex align-items-center'>
-      <a href="{% url 'accounts:detail' comment.user.pk %}" class='my-0 text-decoration-none text-dark'>{{ comment.user }}</a>
-      <span style='font-size:0.8rem;' class='text-secondary mx-2'>{{ comment.created_at }}</span>
-      {% if request.user.is_authenticated %}
-        <a class='text-decoration-none' href="{% url 'reviews:comment_like' comment.pk %}">
-          {% if request.user in comment.like_users.all %}
-            <i class="bi bi-hand-thumbs-up-fill text-dark"></i>
-          {% else %}
-            <i class="bi bi-hand-thumbs-up text-dark"></i>
+  </div>
+
+  <div class='bg-light p-2 rounded my-5'>
+    <p style='font-size:0.8rem;' class='text-secondary my-2'>좋아요
+      <span style='font-size:0.8rem;' id="like-count" class="text-center me-3">{{ review.like_users.count }}</span>
+      댓글
+      {{ comments.count }}
+    </p>
+    <form class='mb-5' id='comment-form' data-review-id="{{ review.id }}">
+      {% csrf_token %}
+      {% bootstrap_form comment_form %}
+      <div class='d-flex justify-content-end'>
+        <input class='btn btn-outline-dark btn-sm' type="submit" value='등록'>
+      </div>
+    </form>
+    <div id='comments'>
+      {% for comment in comments %}
+        <div class='d-flex align-items-center'>
+          <a href="{% url 'accounts:detail' comment.user.pk %}" class='my-0 text-decoration-none text-dark'>{{ comment.user.nickname }}</a>
+          <span style='font-size:0.7rem;' class='text-secondary mx-2'>{{ comment.created_at }}</span>
+          {% if request.user.is_authenticated %}
+            <a class='text-decoration-none' href="{% url 'reviews:comment_like' comment.pk %}">
+              {% if request.user in comment.like_users.all %}
+                <i class="bi bi-hand-thumbs-up-fill text-dark"></i>
+              {% else %}
+                <i class="bi bi-hand-thumbs-up text-dark"></i>
+              {% endif %}
+            </a>
+            <span class='mx-1'>{{ comment.like_users.count }}</span>
           {% endif %}
-        </a>
-        <span id="comment-like-count">{{ comment.like_users.count }}</span>
-      {% endif %}
-      {% if comment.user == request.user %}
-        <form class='mx-2' action="{% url 'reviews:comment_delete' review.pk comment.pk %}" method="POST">
-          {% csrf_token %}
-          <button class='btn btn-outline-danger btn-sm px-1 py-0' type='submit'>
-            <i class="bi bi-x-lg"></i>
-          </button>
-        </form>
-      {% endif %}
+          {% if comment.user == request.user %}
+            <a href="{% url 'reviews:comment_delete' review.pk comment.pk %}" class='btn btn-outline-danger btn-sm px-1 py-0'>
+              <i class="bi bi-x-lg"></i>
+            </a>
+          {% endif %}
+        </div>
+        <p class='my-2'>{{ comment.content }}</p>
+        <hr>
+      {% endfor %}
     </div>
-    <p class='my-2'>{{ comment.content }}</p>
-    <hr>
-  {% endfor %}
+  </div>
 {% endblock content %}
 
 {% block script %}
@@ -131,6 +141,103 @@
         likeCount.innerText = response.data.likeCount
       })
     })
+  </script>
+  <script>
+    const commentForm = document.querySelector('#comment-form')
+    const csrftoken = document
+      .querySelector('[name=csrfmiddlewaretoken]')
+      .value
+      commentForm
+      .addEventListener('submit', function (event) {
+        event.preventDefault();
+        axios({
+          method: 'post',
+          url: `/reviews/${event.target.dataset.reviewId}/comment_create/`,
+          headers: {
+            'X-CSRFToken': csrftoken
+          },
+          data: new FormData(commentForm)
+        }).then(response => {
+          const comments = document.querySelector('#comments')
+          comments.replaceChildren()
+          for (comment of response.data.comments) {
+            const hr = document.createElement('hr')
+
+            const div1 = document.createElement('div')
+            div1
+              .classList
+              .add('d-flex', 'align-items-center')
+
+            const a1 = document.createElement('a')
+            a1.setAttribute('href', `/accounts/detail/${comment[3]}/`)
+            a1
+              .classList
+              .add('text-decoration-none', 'my-0', 'text-dark')
+            a1.innerText = comment[1]
+            div1.append(a1)
+
+            const span1 = document.createElement('span')
+            span1
+              .classList
+              .add('mx-2', 'text-secondary')
+            span1.setAttribute('style', 'font-size:0.7rem;')
+            if (parseInt(new Date(comment[2]).getHours()) >= 12) {
+              span1.innerText = `${new Date(comment[2]).getFullYear()}년 ${new Date(comment[2]).getMonth() + 1}월 ${new Date(comment[2]).getDate()}일 ${parseInt(new Date(comment[2]).getHours()) - 12}:${new Date(comment[2]).getMinutes()} 오후`
+            } else {
+              span1.innerText = `${new Date(comment[2]).getFullYear()}년 ${new Date(comment[2]).getMonth() + 1}월 ${new Date(comment[2]).getDate()}일 ${new Date(comment[2]).getHours()}:${new Date(comment[2]).getMinutes()} 오전`
+            }
+            div1.append(span1)
+
+            if (comment[9] === true) {
+              const a2 = document.createElement('a')
+              a2
+                .classList
+                .add('text-decoration-none')
+              a2.setAttribute('href', `/reviews/comment/${comment[5]}/like/`)
+              if (comment[7] === true) {
+                const i1 = document.createElement('i')
+                i1
+                  .classList
+                  .add('bi', 'bi-hand-thumbs-up-fill', 'text-dark')
+                a2.append(i1)
+              } else {
+                const i1 = document.createElement('i')
+                i1
+                  .classList
+                  .add('bi', 'bi-hand-thumbs-up', 'text-dark')
+                a2.append(i1)
+              }
+              const span2 = document.createElement('span')
+              span2
+                .classList
+                .add('mx-1')
+              span2.innerText = comment[8]
+              div1.append(a2, span2)
+            }
+
+            if (comment[3] === comment[4]) {
+              const a3 = document.createElement('a')
+              a3
+                .classList
+                .add('btn', 'btn-outline-danger', 'btn-sm', 'px-1', 'py-0')
+              a3.setAttribute('href', `/reviews/${comment[6]}/comment_delete/${comment[5]}/`)
+              const i = document.createElement('i')
+              i
+                .classList
+                .add('bi', 'bi-x-lg')
+              a3.append(i)
+              div1.append(a3)
+            }
+            const p1 = document.createElement('p')
+            p1
+              .classList
+              .add('my-2')
+            p1.innerText = comment[0]
+            comments.append(div1, p1, hr)
+          }
+          commentForm.reset()
+        })
+      })
   </script>
 
 {% endblock script %}

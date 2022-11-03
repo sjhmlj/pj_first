@@ -34,14 +34,14 @@
   </div>
   <div class='rounded bg-light p-4 mt-4'>
     <div class='d-flex justify-content-between mb-3'>
-      <h3>리뷰 목록 ({{ reviews.count }})</h3>
+      <h5>{{ reviews.count }}개의 리뷰</h5>
       <div>
         <a class='btn btn-outline-dark btn-sm' href="{% url 'reviews:review_create' movie.pk %}">리뷰 작성</a>
       </div>
     </div>
     <div class='row'>
       {% for review in reviews %}
-        <div class="col-4">
+        <div class="col-4 my-2">
           <a class='text-decoration-none text-dark' href="{% url 'reviews:review_detail' review.pk %}">
             <div class="card">
               <div class="card-header">

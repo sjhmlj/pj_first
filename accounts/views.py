@@ -36,7 +36,7 @@ def login(request):
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
             auth_login(request, form.get_user())
-            return redirect("reviews:index")
+            return redirect(request.GET.get("next") or "reviews:index")
     else:
         form = AuthenticationForm()
     context = {
@@ -98,7 +98,6 @@ def password_update(request):
         "form": form,
     }
     return render(request, "accounts/update.html", context)
-
 
 @login_required
 @require_POST
