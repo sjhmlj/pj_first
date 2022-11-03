@@ -3,17 +3,24 @@
 {% load static %}
 {% block content %}
   <h1>리뷰 작성</h1>
-  <form action="" method="POST">
+  <form action="" id="myform" method="POST">
     {% csrf_token %}
     {% bootstrap_form review_form %}
-    <label for="grade">평점</label>
-    <select id="grade" name="grade" class="form-select" aria-label="Default select example">
-      <option selected="1">1</option>
-      <option value="2">2</option>
-      <option value="3">3</option>
-      <option value="4">4</option>
-      <option value="5">5</option>
-    </select>
-    <input class="my-3 btn btn-outline-dark" type="submit">
+    <p class='mb-0'>평점</p>
+    <fieldset>
+      <input class='myform-input' type="radio" name="grade" value="5" id="rate1">
+      <label class='myform-label' for="rate1">★</label>
+      <input class='myform-input' type="radio" name="grade" value="4" id="rate2">
+      <label class='myform-label' for="rate2">★</label>
+      <input class='myform-input' type="radio" name="grade" value="3" id="rate3">
+      <label class='myform-label' for="rate3">★</label>
+      <input class='myform-input' type="radio" name="grade" value="2" id="rate4">
+      <label class='myform-label' for="rate4">★</label>
+      <input class='myform-input' type="radio" name="grade" value="1" id="rate5">
+      <label class='myform-label' for="rate5">★</label>
+    </fieldset>
+    <div>
+      <input class="my-3 btn btn-outline-dark" type="submit">
+    </div>
   </form>
 {% endblock content %}
