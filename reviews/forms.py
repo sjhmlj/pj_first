@@ -30,5 +30,5 @@ class CommentForm(forms.ModelForm):
             'content',
         ]
         labels = {
-            'content':'댓글'
+            'content':'댓글 작성'
         }

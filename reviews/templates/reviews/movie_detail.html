@@ -11,8 +11,12 @@
   <div class="d-flex my-2">
     <img class='rounded' src="{{ movie.image.url }}" alt="{{ movie.image }}">
     <div class='d-flex flex-column justify-content-center mx-3'>
-      <h2>{{ movie.title }}|{{ total.review_avg }}
-        <span class='fs-4 text-secondary'>({{ movie.opening_date.year }})</span></h2>
+      <h2>{{ movie.title }}
+        <span class='fs-4 text-secondary'>({{ movie.opening_date.year }})</span>
+        <span class='fs-6'>
+          <i class="bi bi-star-fill"></i>{{ total.review_avg }}
+        </span>
+      </h2>
       <div class='mt-5 mb-2'>
         <h5>줄거리</h5>
         <p>{{ movie.content }}</p>

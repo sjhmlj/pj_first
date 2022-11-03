@@ -18,6 +18,11 @@ html {
   z-index: 999;
 }
 
+.heart-button{
+  border: 0;
+  outline: 0;
+}
+
 .search_bar {
   display: flex;
   margin: 0 0 0 auto;

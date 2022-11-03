@@ -2,33 +2,37 @@
 {% load django_bootstrap5 %}
 {% load static %}
 {% block content %}
-  <h1>{{ review.title }}
-  </h1>
-  <div class="d-flex justify-content-between">
-    <div>
-      <h5 class='text-secondary'>
-        {{ review.movie.title }}({{ review.movie.opening_date.year }})</h5>
-      <p>작성자:
-        <a href="{% url 'accounts:detail' review.user.pk %}">
-          {{ review.user }}</a>
-      </p>
-    </div>
-    <div>
-      <h5>평점 :
-        {{ review.grade }}/5점</h5>
-      <span class='text-secondary'>{{ review.created_at }}</span>
+  <div class="d-flex">
+    <a class='border border-dark rounded bg-light' href="{% url 'reviews:movie_detail' review.movie.pk %}"><img class=' rounded p-1' src="{{ review.movie.image_sm.url }}" alt="{{ review.movie.image_sm }}"></a>
+    <div class='w-100 ms-3'>
+      <h1>{{ review.title }}
+      </h1>
+      <div class="d-flex justify-content-between">
+        <div>
+          <h5 class='text-secondary'>
+            {{ review.movie.title }}({{ review.movie.opening_date.year }})</h5>
+          <p>작성자:
+            <a href="{% url 'accounts:detail' review.user.pk %}">
+              {{ review.user }}</a>
+          </p>
+        </div>
+        <div>
+          <h5>평점 :
+            {{ review.grade }}/5점</h5>
+          <span class='text-secondary'>{{ review.created_at }}</span>
+        </div>
+      </div>
     </div>
   </div>
   <p style='height:10rem;' class='my-5'>{{ review.content }}</p>
   {% if request.user.is_authenticated %}
     <div class="d-flex justify-content-center">
-      <div class="d-flex align-items-center border rounded">
+      <div class="d-flex align-items-center">
         {% if request.user in review.like_users.all %}
-          <i id="like-btn" data-review-id="{{ review.pk }}" class="btn bi bi-suit-heart-fill text-danger fs-2 px-2 py-0"></i>
+          <i id="like-btn" data-review-id="{{ review.pk }}" class="btn bi bi-suit-heart-fill text-danger fs-2 heart-button"></i>
         {% else %}
-          <i id="like-btn" data-review-id="{{ review.pk }}" class="btn bi bi-suit-heart text-danger fs-2"></i>
+          <i id="like-btn" data-review-id="{{ review.pk }}" class="btn bi bi-suit-heart text-danger fs-2 heart-button"></i>
         {% endif %}
-        <span id="like-count" class="text-center fs-2 mx-2">{{ review.like_users.count }}</span>
       </div>
     </div>
     {% if review.user == request.user %}
@@ -66,8 +70,13 @@
   {% endif %}
   <form action="{% url 'reviews:comment_create' review.pk %}" method="POST">
     {% csrf_token %}
+    <label sytle='font-size:0.7rem;' class='text-secondary my-2' for="content">좋아요
+      <span sytle='font-size:0.7rem;' id="like-count" class="text-center me-3">{{ review.like_users.count }}</span>&nbsp;&nbsp;&nbsp;&nbsp; 댓글
+      {{ comments.count }}</label>
     {% bootstrap_form comment_form %}
-    <input type="submit">
+    <div class='d-flex justify-content-end'>
+      <input class='btn btn-outline-dark btn-sm' type="submit" value='등록'>
+    </div>
   </form>
   <hr>
   {% for comment in comments %}
@@ -87,7 +96,9 @@
       {% if comment.user == request.user %}
         <form class='mx-2' action="{% url 'reviews:comment_delete' review.pk comment.pk %}" method="POST">
           {% csrf_token %}
-          <input class='btn btn-outline-danger py-0 px-1' type="submit" value='삭제'>
+          <button class='btn btn-outline-danger btn-sm px-1 py-0' type='submit'>
+            <i class="bi bi-x-lg"></i>
+          </button>
         </form>
       {% endif %}
     </div>

@@ -53,9 +53,24 @@
     </div>
     {% empty %}
     <div class="row mx-auto">
-      <p>검색 결과가 없습니다.</p>
+      <span class="mb-3">유저</span>
+      {% for user in user %}
+        <div class="col-9 col-sm-12 col-md-4 col-md-12 col-lg-4">
+          <div class="card text-center" style="min-width: 10rem;">
+            <a href="{% url 'accounts:detail' user.pk %}" class="text-decoration-none text-dark">
+              <h5>{{ user.username }}</h5>
+            </a>
+            <div class="card-body">
+              <p>{{ user.nickname }}</p>
+            </div>
+          </div>
+        </div>
+        {% empty %}
+        <div class="row mx-auto">
+          <p>검색 결과가 없습니다.</p>
+        </div>
+      {% endfor %}
     </div>
-    {% endfor %}
   </div>
 </div>
 <!-- 영화 -->
@@ -75,13 +90,27 @@
         <div class="card-body">
           <p class="card-text text-truncate">{{ movie.content }}</p>
         </div>
-      </div>
+      {% endfor %}
     </div>
-    {% empty %}
-    <div class="row mx-auto">
-      <p>검색 결과가 없습니다.</p>
-    </div>
-    {% endfor %}
   </div>
-</div>
+  <!-- 영화 -->
+  <div class="container my-3">
+    <div class="row mx-auto">
+      <span class="mb-3">영화</span>
+      {% for movie in movie %}
+        <div class="col-9 col-sm-12 col-md-4 col-md-12 col-lg-4">
+          <div class="card text-center" style="min-width: 10rem;">
+            <a href="{% url 'reviews:movie_detail' movie.pk %}" class="text-decoration-none text-dark">
+              <img src="{{ movie.image.url }}" alt="{{ movie.image }}">
+              <h5>{{ movie.title }}</h5>
+            </a>
+          </div>
+        </div>
+        {% empty %}
+        <div class="row mx-auto">
+          <p>검색 결과가 없습니다.</p>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
 {% endblock content %}
