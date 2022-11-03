@@ -34,7 +34,7 @@
     {% for review in review %}
     <div class="col-9 col-sm-12 col-md-4 col-md-12 col-lg-4">
       <div class="card text-center" style="min-width: 10rem;">
-        <a href="{% url 'reviews:review_detail' review_pk %}" class="text-decoration-none text-dark">
+        <a href="{% url 'reviews:review_detail' review.pk %}" class="text-decoration-none text-dark">
           <h5>{{ review.title }}</h5>
         </a>
         <div class="card-body">
@@ -57,7 +57,7 @@
     <div class="col-9 col-sm-12 col-md-4 col-md-12 col-lg-4">
       <div class="card text-center" style="min-width: 10rem;">
         <a href="{{ movie.get_url }}" class="text-decoration-none text-dark">
-          <img src="{% url 'reviews.movie_detail' movie_pk %}" alt="{{ movie.title }}">
+          <img src="{% url 'reviews.movie_detail' movie.pk %}" alt="{{ movie.title }}">
           <h5>{{ movie.title }}</h5>
         </a>
         <div class="card-body">
