@@ -56,8 +56,8 @@
     {% for movie in movie %}
     <div class="col-9 col-sm-12 col-md-4 col-md-12 col-lg-4">
       <div class="card text-center" style="min-width: 10rem;">
-        <a href="{{ movie.get_url }}" class="text-decoration-none text-dark">
-          <img src="{% url 'reviews.movie_detail' movie.pk %}" alt="{{ movie.title }}">
+        <a href="{% url 'reviews:movie_detail' movie.pk %}" class="text-decoration-none text-dark">
+          <img src="{{ movie.image.url }}" alt="{{ movie.title }}">
           <h5>{{ movie.title }}</h5>
         </a>
         <div class="card-body">
