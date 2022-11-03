@@ -45,7 +45,11 @@
           <a class='text-decoration-none text-dark' href="{% url 'reviews:review_detail' review.pk %}">
             <div class="card">
               <div class="card-header">
-                <img style='width:1.5rem; hegiht:1.5rem;' class='rounded-circle' src="{{ review.user.profile_image.url }}" alt="{{ review.user.profile_image }}">
+                {% if review.user.profile_image %}
+                  <img style='width:1.5rem; hegiht:1.5rem;' class='rounded-circle' src="{{ review.user.profile_image.url }}" alt="{{ review.user.profile_image }}">
+                {% else %}
+                  <img style='width:1.5rem; hegiht:1.5rem;' class='rounded-circle' src="{% static '/images/profile_images/no-avatar.png' %}" alt="no-avatar">
+                {% endif %}
                 <span class='mx-1 fw-bold'>{{ review.user.nickname }}</span>
               </div>
               <div class="card-body">
