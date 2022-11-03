@@ -18,7 +18,7 @@
       <h2>{{ movie.title }}
         <span class='fs-4 text-secondary'>({{ movie.opening_date.year }})</span>
         <span class='fs-6'>
-          <i class="bi bi-star-fill"></i>{{ total.review_avg }}
+          <i class="bi bi-star-fill"></i>{{ total.review_avg|floatformat }}
         </span>
       </h2>
       <div class='mt-5 mb-2'>
