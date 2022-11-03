@@ -13,13 +13,13 @@ def searchResult(request):
     query = None
     if "q" in request.GET:
         query = request.GET.get("q")
-        user = User.objects.all().filter(
+        user = User.objects.order_by("-pk").filter(
             Q(username__contains=query) | Q(nickname__contains=query)
         )
-        review = Review.objects.all().filter(
+        review = Review.objects.order_by("-pk").filter(
             Q(title__contains=query) | Q(content__contains=query)
         )
-        movie = Movie.objects.all().filter(
+        movie = Movie.objects.order_by("-pk").filter(
             Q(title__contains=query) | Q(content__contains=query)
         )
     context = {
