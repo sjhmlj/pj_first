@@ -16,7 +16,7 @@
       <div class="card" style="width: 16rem;">
         <a href="{% url 'accounts:detail' user.pk %}" class="text-decoration-none text-dark">
           {% if user.profile_image %}
-          <img src="{{ user.profile_image.url }}" alt="{{ user.profile_image }}" class="card-img-top mb-2">
+          <img src="{{ user.profile_image }}" alt="{{ user.profile_image }}" class="card-img-top mb-2">
           {% else %}
           <img src="{% static '/images/profile_images/no-avatar.png' %}" alt="no-avatar" class="card-img-top mb-2">
           {% endif %}
