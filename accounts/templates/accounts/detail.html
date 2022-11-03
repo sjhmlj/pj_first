@@ -1,20 +1,28 @@
 {% extends 'base.html' %}
 {% load django_bootstrap5 %}
 {% load static %}
+{% block css %}
+  <style>
+    a {
+      text-decoration: none;
+      color: black;
+    }
+  </style>
+{% endblock css %}
 {% block content %}
   <div class='row mt-5'>
     <!-- 내 프로필 사이드 배너 -->
     {% if user == request.user %}
       <div class='col-3 px-3 pt-3'>
         <h3 class="text-bg-secondary p-3 text-center rounded">
-          <a href="{% url 'accounts:detail' user.pk %}" style="text-decoration:none; color:white;">설정</a>
+          <a href="{% url 'accounts:detail' user.pk %}" style="color:white;">설정</a>
         </h3>
         <ul class='list-group'>
           <li class='pt-2 list-group-item list-group-item-action'>
-            <a href="{% url 'accounts:profile_update' %}" style="text-decoration:none; color:black;">프로필 변경</a>
+            <a href="{% url 'accounts:profile_update' %}">프로필 변경</a>
           </li>
-          <li class='pt-2 list-group-item'>
-            <a href="{% url 'accounts:password_update' %}" style="text-decoration:none; color:black;">비밀번호 변경</a>
+          <li class='pt-2 list-group-item list-group-item-action'>
+            <a href="{% url 'accounts:password_update' %}">비밀번호 변경</a>
           </li>
           <li class='pt-2 list-group-item'>
             <!-- 탈퇴하기는 모달을 띄움 -->
@@ -53,8 +61,8 @@
           모음
         </h3>
         <ul class='list-group'>
-          <li class='pt-2 list-group-item'>
-            <a href="{% url 'accounts:reviews' user.pk %}" style="text-decoration:none; color:black;">리뷰 보기</a>
+          <li class='pt-2 list-group-item list-group-item-action'>
+            <a href="{% url 'accounts:reviews' user.pk %}">리뷰 보기</a>
           </li>
         </ul>
       </div>
@@ -75,6 +83,15 @@
             {% endif %}
           </form>
 
+        </ul>
+
+        <h3 class="mt-5 text-bg-primary p-3 text-center rounded">
+          모음
+        </h3>
+        <ul class='list-group'>
+          <li class='pt-2 list-group-item list-group-item-action'>
+            <a href="{% url 'accounts:reviews' user.pk %}">리뷰 보기</a>
+          </li>
         </ul>
       </div>
     {% endif %}
@@ -102,10 +119,13 @@
             {% endif %}
             <div>
               팔로워
-              <span id="followers">{{user.followers.all|length}}</span>
+              <a href="{% url 'accounts:showfollow' user.pk %}">
+                <span id="followers">{{user.followers.all|length}}</span>
+              </a>
               | 팔로잉
-              <span id="followings">{{user.followings.all|length}}</span>
-
+              <a href="{% url 'accounts:showfollow' user.pk %}">
+                <span id="followings">{{user.followings.all|length}}</span>
+              </a>
               <div>
                 작성한 리뷰 수:
                 {{reviews_number}}

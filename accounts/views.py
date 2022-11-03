@@ -141,3 +141,14 @@ def reviews(request, pk):
         "user": user,
     }
     return render(request, "accounts/reviews.html", context)
+
+
+def showfollow(request, pk):
+    user = get_object_or_404(get_user_model(), id=pk)
+    followers = user.followers.all()
+    followings = user.followings.all()
+    context = {
+        "followers": followers,
+        "followings": followings,
+    }
+    return render(request, "accounts/show_follow.html", context)
