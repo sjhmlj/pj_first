@@ -118,17 +118,16 @@
               <div>no email</div>
             {% endif %}
             <div>
-              팔로워
               <a href="{% url 'accounts:showfollow' user.pk %}">
+                팔로워
                 <span id="followers">{{user.followers.all|length}}</span>
-              </a>
-              | 팔로잉
-              <a href="{% url 'accounts:showfollow' user.pk %}">
+                | 팔로잉
                 <span id="followings">{{user.followings.all|length}}</span>
               </a>
               <div>
-                작성한 리뷰 수:
-                {{reviews_number}}
+                <a href="{% url 'accounts:reviews' user.pk %}">
+                  작성한 리뷰 수:
+                  {{reviews_number}}</a>
 
               </div>
             </div>

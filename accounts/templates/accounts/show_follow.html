@@ -18,6 +18,7 @@
 {% endblock css %}
 {% block content %}
   <h1>Followers</h1>
+  <div>{{followers}}</div>
   {% if followers %}
     <div class="d-flex">
       {% for follower in followers %}
@@ -44,3 +45,12 @@
     <div>No One</div>
   {% endif %}
 {% endblock content %}
+{% block script %}
+  <script>
+    const followers = `{{followers}}`
+
+    const followers_0 = `{{followers.0}}`
+    console.log(followers)
+    console.log(followers_0)
+  </script>
+{% endblock script %}
