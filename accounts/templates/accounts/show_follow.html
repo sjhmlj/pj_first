@@ -15,6 +15,7 @@
   </style>
 {% endblock css %}
 {% block content %}
+
   <div class="row">
     <div class="col-6 p-3">
       {% if followers %}
@@ -71,3 +72,11 @@
       {% endif %}
     </div>
   {% endblock content %}
+{% block script %}
+  <script>
+    const followers = `{{followers}}`
+    const followers_0 = `{{followers.0}}`
+    console.log(followers)
+    console.log(followers_0)
+  </script>
+{% endblock script %}

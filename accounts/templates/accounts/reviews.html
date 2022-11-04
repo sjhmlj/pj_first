@@ -1,11 +1,25 @@
 {% extends 'base.html' %}
+{% block css %}
+  <style>
+    .review-div {
+      position: relative;
+      left: 30%;
+
+    }
+
+    .w-40 {
+      width: 40%;
+    }
+  </style>
+{% endblock css %}
 
 {% block content %}
-  <h1>
+  <h1 class="text-center mb-5">
     {{user.nickname}}님의 리뷰
   </h1>
   {% for review in reviews %}
-    <div class="m-3 d-flex">
+
+    <div class="review-div m-3 d-flex w-40">
       <!-- 영화 포스터 클릭하면 해당 리뷰로 이동 -->
       <a href="{% url 'reviews:review_detail' review.pk %}">
         <img src="{{review.movie.image.url}}" alt="" style="width:5rem;" class="rounded">
@@ -13,7 +27,15 @@
       <div class="ms-3 d-flex flex-column justify-content-between">
         <div>
           <div class="fw-bolder fs-5">{{review.title}}</div>
-          <div class="fs-6">{{review.content}}</div>
+          <div class="fs-6">
+            <!-- 내용이 너무 길 경우에는 자름-->
+            {% if review.content.107 %}
+              {{review.content|slice:":106"}}
+              ...
+            {% else %}
+              {{review.content}}
+            {% endif %}
+          </div>
         </div>
         <div>
           <i class="bi bi-suit-heart-fill text-danger"></i>
@@ -24,4 +46,5 @@
       </div>
     </div>
   {% endfor %}
+</div>
 {% endblock content %}
