@@ -129,8 +129,6 @@ def follow(request, pk):
         }
         return JsonResponse(context)
 
-    return redirect("accounts:detail", pk)
-
 
 def reviews(request, pk):
     user = get_object_or_404(get_user_model(), id=pk)

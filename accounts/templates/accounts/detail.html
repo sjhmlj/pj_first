@@ -96,17 +96,15 @@
       </div>
     {% endif %}
     <!-- 프로필 -->
-    <div class='col-9 bg-light rounded px-4'>
+    <div class='col-9 rounded px-4'>
       <div class="mt-4">
 
         <div class='d-flex'>
 
           {% if user.profile_image %}
-
             <img src="{{ user.profile_image.url }}" alt="{{ user.profile_image }}" class="rounded-circle border border-light">
           {% else %}
             <img src="{% static '/images/profile_images/no-avatar.png' %}" alt="no-avatar" class="rounded-circle border border-light">
-
           {% endif %}
           <div class='px-5 pt-3'>
             <h4>

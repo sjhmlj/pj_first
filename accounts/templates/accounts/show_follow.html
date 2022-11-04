@@ -1,4 +1,6 @@
 {% extends 'base.html' %}
+{% load django_bootstrap5 %}
+{% load static %}
 {% block css %}
   <style>
     .small-image {
@@ -10,37 +12,62 @@
       width: 3rem;
       text-align: center;
     }
-
-    .userdiv {
-      margin-right: 1rem;
-    }
   </style>
 {% endblock css %}
 {% block content %}
-  <h1>Followers</h1>
-  {% if followers %}
-    <div class="d-flex">
-      {% for follower in followers %}
-        <div class="userdiv">
-          <img src="{{follower.profile_image.url}}" alt="" class="small-image rounded-circle">
-          <div class="username">{{follower.nickname}}</div>
+  <div class="row">
+    <div class="col-6 p-3">
+      {% if followers %}
+        <h3>팔로워</h3>
+        <div class="d-flex">
+          {% for follower in followers %}
+            <div class="col-4">
+              <a href="{% url 'accounts:detail' follower.pk %}" class="text-decoration-none text-dark">
+                <div class="d-flex border rounded m-1 p-2">
+                  {% if follower.profile_image %}
+                    <img src="{{ follower.profile_image.url }}" alt="" class="small-image rounded-circle">
+                  {% else %}
+                    <img class="small-image rounded-circle" src="{% static '/images/profile_images/no-avatar.png' %}" alt="">
+                  {% endif %}
+                  <div class="ms-2">
+                    <p class="m-0">{{ follower.nickname }}</p>
+                    <p style="font-size:0.8rem;" class="m-0">{{ follower }}</p>
+                  </div>
+                </div>
+              </a>
+            </div>
+          {% endfor %}
         </div>
-      {% endfor %}
+      {% else %}
+        <h3>팔로워</h3>
+        <div>No One</div>
+      {% endif %}
     </div>
-  {% else %}
-    <div>No One</div>
-  {% endif %}
-  <h1>Followings</h1>
-  {% if followings %}
-    {% for following in followings %}
-      <div class="d-flex">
-        <div class="userdiv">
-          <img src="{{following.profile_image.url}}" alt="" class="small-image rounded-circle">
+    <div class="col-6 p-3">
+      {% if followings %}
+        <h3>팔로잉</h3>
+        <div class="d-flex">
+          {% for following in followings %}
+            <div class="col-4">
+              <a href="{% url 'accounts:detail' following.pk %}" class="text-decoration-none text-dark">
+                <div class="d-flex border rounded m-1 p-2">
+                  {% if following.profile_image %}
+                    <img src="{{ following.profile_image.url }}" alt="" class="small-image rounded-circle">
+                  {% else %}
+                    <img class="small-image rounded-circle" src="{% static '/images/profile_images/no-avatar.png' %}" alt="">
+                  {% endif %}
+                  <div class="ms-2">
+                    <p class="m-0">{{ following.nickname }}</p>
+                    <p style="font-size:0.8rem;" class="m-0">{{ following }}</p>
+                  </div>
+                </div>
+              </a>
+            </div>
+          {% endfor %}
         </div>
-        <div class="username">{{following.nickname}}</div>
-      </div>
-    {% endfor %}
-  {% else %}
-    <div>No One</div>
-  {% endif %}
-{% endblock content %}
+      {% else %}
+        <h3>팔로잉</h3>
+        <div>No One</div>
+      {% endif %}
+    </div>
+  {% endblock content %}
