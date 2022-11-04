@@ -1,10 +1,18 @@
 {% extends 'base.html' %}
 {% load django_bootstrap5 %}
 {% load static %}
+{% block css %}
+  <style>
+    body {
+      background-color: rgb(247, 247, 247);
+    }
+  </style>
+{% endblock css %}
+
 {% block content %}
-  <div class='bg-light rounded p-3'>
+  <div class='bg-white rounded p-4 border'>
     <div class="d-flex">
-      <a class='border border-dark rounded bg-light' href="{% url 'reviews:movie_detail' review.movie.pk %}"><img style='width:120px; height:160px;' class=' rounded p-1' src="{{ review.movie.image.url }}" alt="{{ review.movie.image }}"></a>
+      <a class='border border-dark rounded bg-white' href="{% url 'reviews:movie_detail' review.movie.pk %}"><img style='width:120px; height:160px;' class=' rounded p-1' src="{{ review.movie.image.url }}" alt="{{ review.movie.image }}"></a>
       <div class='w-100 ms-3'>
         <h2>{{ review.title }}
         </h2>
@@ -25,8 +33,11 @@
                 {{ review.user }}</a>
             </p>
           </div>
-          <div>
-            <span class='text-secondary'>{{ review.created_at }}</span>
+          <div class='d-flex flex-column align-items-end justify-content-start'>
+            <span style='font-size:0.9rem;' class='text-secondary'>{{ review.created_at }}</span>
+            {% if review.created_at != review.updated_at %}
+              <span style='font-size:0.9rem;' class='text-secondary'>(수정){{ review.updated_at }}</span>
+            {% endif %}
           </div>
         </div>
       </div>
@@ -49,7 +60,6 @@
           <button type="button" class="mx-2 btn btn-outline-dark btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal">
             삭제
           </button>
-
           <!-- Modal -->
           <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -74,24 +84,25 @@
         </div>
       {% endif %}
     {% endif %}
-  </div>
-
-  <div class='bg-light p-2 rounded my-5'>
-    <p style='font-size:0.8rem;' class='text-secondary my-2'>좋아요
+    <p style='font-size:0.8rem;' class='text-secondary my-1'>좋아요
       <span style='font-size:0.8rem;' id="like-count" class="text-center me-3">{{ review.like_users.count }}</span>
       댓글
       {{ comments.count }}
     </p>
-    <form class='mb-5' id='comment-form' data-review-id="{{ review.id }}">
+    <form id='comment-form' data-review-id="{{ review.id }}">
       {% csrf_token %}
       {% bootstrap_form comment_form %}
       <div class='d-flex justify-content-end'>
         <input class='btn btn-outline-dark btn-sm' type="submit" value='등록'>
       </div>
     </form>
+  </div>
+
+  <div class='bg-white p-4 rounded my-5 border'>
+    <hr>
     <div id='comments'>
       {% for comment in comments %}
-        <div class='d-flex align-items-center'>
+        <div class='d-flex align-items-end'>
           <a href="{% url 'accounts:detail' comment.user.pk %}" class='my-0 text-decoration-none text-dark'>{{ comment.user.nickname }}</a>
           <span style='font-size:0.7rem;' class='text-secondary mx-2'>{{ comment.created_at }}</span>
           {% if request.user.is_authenticated %}
@@ -105,8 +116,8 @@
             <span class='mx-1'>{{ comment.like_users.count }}</span>
           {% endif %}
           {% if comment.user == request.user %}
-            <a href="{% url 'reviews:comment_delete' review.pk comment.pk %}" class='btn btn-outline-danger btn-sm px-1 py-0'>
-              <i class="bi bi-x-lg"></i>
+            <a href="{% url 'reviews:comment_delete' review.pk comment.pk %}" class='px-1'>
+              <i class="bi bi-x-square text-danger"></i>
             </a>
           {% endif %}
         </div>
@@ -166,7 +177,7 @@
             const div1 = document.createElement('div')
             div1
               .classList
-              .add('d-flex', 'align-items-center')
+              .add('d-flex', 'align-items-end')
 
             const a1 = document.createElement('a')
             a1.setAttribute('href', `/accounts/detail/${comment[3]}/`)
@@ -219,12 +230,12 @@
               const a3 = document.createElement('a')
               a3
                 .classList
-                .add('btn', 'btn-outline-danger', 'btn-sm', 'px-1', 'py-0')
+                .add('px-1')
               a3.setAttribute('href', `/reviews/${comment[6]}/comment_delete/${comment[5]}/`)
               const i = document.createElement('i')
               i
                 .classList
-                .add('bi', 'bi-x-lg')
+                .add('bi', 'bi-x-square', 'text-danger')
               a3.append(i)
               div1.append(a3)
             }
@@ -235,6 +246,7 @@
             p1.innerText = comment[0]
             comments.append(div1, p1, hr)
           }
+          comments.removeChild(hr)
           commentForm.reset()
         })
       })

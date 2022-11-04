@@ -8,8 +8,13 @@ from django.db.models import Avg, Count
 
 
 def index(request):
+    movies = Movie.objects.annotate(all_avg=Avg('review__grade'))
+    rank_movies = movies.order_by('-all_avg')
+
     context = {
-        'movies': Movie.objects.all(),
+        'movies': movies,
+        'rank_movies' : rank_movies,
+        
     }
     return render(request, 'reviews/index.html', context)
 
@@ -167,7 +172,8 @@ def comment_create(request, review_pk):
                     a.review.id, 
                     is_liked, 
                     comment_like_user, 
-                    islogin])
+                    islogin
+                    ])
             context = {
                 'comments':comments
             }

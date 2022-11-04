@@ -15,7 +15,7 @@
           </li>
           {% if request.user.is_superuser %}
             <li class="nav-item">
-              <a class="nav-link me-2" href="{% url 'reviews:movie_create' %}">영화등록(임시)</a>
+              <a class="nav-link me-2" href="{% url 'reviews:movie_create' %}">영화등록</a>
             </li>
           {% endif %}
         {% else %}
@@ -32,7 +32,7 @@
           <form class="d-flex" action="{% url 'search:searchResult' %}" method="get">
             {% csrf_token %}
             <input class="form-control mx-3" type="search" placeholder="Search" aria-label="Search" name="q">
-            <button class="btn btn-outline-primary me-2" type="submit">Search</button>
+            <button class="btn btn-outline-dark me-2" type="submit">Search</button>
           </form>
         </li>
       </ul>

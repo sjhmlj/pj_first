@@ -3,9 +3,17 @@
 {% load static %}
 
 {% block content %}
-  <form action="" method="POST">
-    {% csrf_token %}
-    {% bootstrap_form form %}
-    <input type="submit" class="btn btn-primary">
-  </form>
+  <div class="d-flex row justify-content-center">
+    <div class="col-4 bg-light shadow p-3 mb-5 bg-body rounded">
+      <h3>로그인</h3>
+      <form action="" method="POST">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <button type="submit" class="btn btn-primary w-100 mt-3">로그인</button>
+      </form>
+      <div class="text-center mt-3">
+        <a href="{% url 'accounts:signup' %}">아이디가 없으신가요?</a>
+      </div>
+    </div>
+  </div>
 {% endblock content %}
