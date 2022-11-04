@@ -18,7 +18,7 @@ html {
   z-index: 999;
 }
 
-.heart-button{
+.heart-button {
   border: 0;
   outline: 0;
 }
@@ -39,28 +39,50 @@ html {
   padding-bottom: 60px;
 }
 
-#myform fieldset{
+.card_list {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+}
+
+.card_list::-webkit-scrollbar {
+  height: 0.5em;
+  background-color: darkgray;
+}
+
+.card_list::-webkit-scrollbar-thumb {
+  background-color: black;
+  border-radius: 5px;
+}
+
+#myform fieldset {
   display: inline-block;
   direction: rtl;
-  border:0;
+  border: 0;
 }
-#myform fieldset legend{
+
+#myform fieldset legend {
   text-align: right;
 }
-.myform-input[type=radio]{
+
+.myform-input[type=radio] {
   display: none;
 }
-.myform-label{
+
+.myform-label {
   font-size: 2rem;
   color: transparent;
   text-shadow: 0 0 0 #f0f0f0;
 }
-.myform-label:hover{
+
+.myform-label:hover {
   text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
 }
-.myform-label:hover ~ label{
+
+.myform-label:hover~label {
   text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
 }
-.myform-input[type=radio]:checked ~ label{
+
+.myform-input[type=radio]:checked~label {
   text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
 }
