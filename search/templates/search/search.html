@@ -3,85 +3,122 @@
 {% load static %}
 
 {% block content %}
-<div class="my-2">
-  <span>
-    <b>"{{ query }}"</b>의 검색결과</span>
-</div>
-<!-- 유저 -->
-<div class="container my-3">
-  <div class="row mx-auto">
-    <span class="mb-3">유저</span>
-    {% for user in user %}
-    <div class="col-9 col-sm-6 col-md-3 mb-3">
-      <div class="card" style="width: 16rem;">
-        <a href="{% url 'accounts:detail' user.pk %}" class="text-decoration-none text-dark">
-          {% if user.profile_image %}
-          <img src="{{ user.profile_image }}" alt="{{ user.profile_image }}" class="card-img-top mb-2">
-          {% else %}
-          <img src="{% static '/images/profile_images/no-avatar.png' %}" alt="no-avatar" class="card-img-top mb-2">
-          {% endif %}
-          <h5 class="card-title mx-3">{{ user.username }}</h5>
-          <h6 class="card-subtitle text-muted mx-3">{{ user.nickname }}</h6>
-        </a>
-        <div class="card-body"></div>
-      </div>
-    </div>
-    {% empty %}
-    <div class="row mx-auto">
-      <p>검색 결과가 없습니다.</p>
-    </div>
-    {% endfor %}
+  <div class="my-2">
+    <span>
+      <b>"{{ query }}"</b>의 검색결과</span>
   </div>
-</div>
-<!-- 리뷰 -->
-<div class="container my-3">
-  <div class="row mx-auto">
-    <span class="mb-3">리뷰</span>
-    {% for review in review %}
-    <div class="col-9 col-sm-6 col-md-3 mb-3">
-      <div class="card" style="width: 16rem;">
-        <a href="{% url 'reviews:review_detail' review.pk %}" class="text-decoration-none text-dark mx-3 mt-2">
-          <h5 class="card-title">{{ review.title }}</h5>
-          <h6 class="card-subtitle mb-2 text-muted">
-            {{ review.created_at | date:'Y-m-d' }}
-            | ★
-            {{ review.grade }}
-          </h6>
-        </a>
-        <div class="card-body">
-          <p class="card-text text-truncate">{{ review.content }}</p>
-        </div>
-      </div>
-    </div>
-    {% empty %}
+  <!-- 유저 -->
+  <div class="container my-3">
     <div class="row mx-auto">
-      <p>검색 결과가 없습니다.</p>
-    </div>
-    {% endfor %}
-  </div>
-</div>
-<!-- 영화 -->
-<div class="container my-3">
-  <div class="row mx-auto">
-    <span class="mb-3">영화</span>
-    {% for movie in movie %}
-    <div class="col-9 col-sm-6 col-md-3 mb-3">
-      <div class="card" style="width: 16rem;">
-        <a href="{% url 'reviews:movie_detail' movie.pk %}" class="text-decoration-none text-dark">
-          <img src="{{ movie.image.url }}" alt="{{ movie.title }}" class="card-img-top mb-2">
-          <h5 class="card-title mx-3">{{ movie.title }}</h5>
-          <h6 class="card-subtitle mb-2 mx-3 text-muted">
-            {{ movie.opening_date | date:'Y' }}
-            |
-            {{ movie.producer }}
-          </h6>
-        </a>
-        <div class="card-body">
-          <p class="card-text text-truncate">{{ movie.content }}</p>
+      <span class="mb-3">유저</span>
+      {% for user in user %}
+        <div class="col-9 col-sm-12 col-md-4 col-md-12 col-lg-4">
+          <div class="card" style="width: 16rem;">
+            <a href="{% url 'accounts:detail' user.pk %}" class="text-decoration-none text-dark">
+              {% if user.profile_image %}
+                <img src="{{ user.profile_image.url }}" alt="{{ user.profile_image }}" class="card-img-top mb-2">
+              {% else %}
+                <img src="{% static '/images/profile_images/no-avatar.png' %}" alt="no-avatar" class="card-img-top mb-2">
+              {% endif %}
+              <h5 class="card-title mx-3">{{ user.username }}</h5>
+              <h6 class="card-subtitle text-muted mx-3">{{ user.nickname }}</h6>
+            </a>
+            <div class="card-body"></div>
+          </div>
         </div>
-      </div>
+        {% empty %}
+        <div class="row mx-auto">
+          <p>검색 결과가 없습니다.</p>
+        </div>
+      {% endfor %}
     </div>
-    {% endfor %}
+  </div>
+  <!-- 리뷰 -->
+  <div class="container my-3">
+    <div class="row mx-auto">
+      <span class="mb-3">리뷰</span>
+      {% for review in review %}
+        <div class="col-9 col-sm-12 col-md-4 col-md-12 col-lg-4">
+          <div class="card" style="width: 16rem;">
+            <a href="{% url 'reviews:review_detail' review.pk %}" class="text-decoration-none text-dark mx-3 mt-2">
+              <h5 class="card-title">{{ review.title }}</h5>
+              <h6 class="card-subtitle mb-2 text-muted">
+                {{ review.created_at | date:'Y-m-d' }}
+                | ★
+                {{ review.grade }}
+              </h6>
+            </a>
+            <div class="card-body">
+              <p class="card-text text-truncate">{{ review.content }}</p>
+            </div>
+          </div>
+        </div>
+        {% empty %}
+        <div class="row mx-auto">
+          <span class="mb-3">유저</span>
+          {% for user in user %}
+            <div class="col-9 col-sm-12 col-md-4 col-md-12 col-lg-4">
+              <div class="card text-center" style="min-width: 10rem;">
+                <a href="{% url 'accounts:detail' user.pk %}" class="text-decoration-none text-dark">
+                  <h5>{{ user.username }}</h5>
+                </a>
+                <div class="card-body">
+                  <p>{{ user.nickname }}</p>
+                </div>
+              </div>
+            </div>
+            {% empty %}
+            <div class="row mx-auto">
+              <p>검색 결과가 없습니다.</p>
+            </div>
+          {% endfor %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+  <!-- 영화 -->
+  <div class="container my-3">
+    <div class="row mx-auto">
+      <span class="mb-3">영화</span>
+      {% for movie in movie %}
+        <div class="col-9 col-sm-12 col-md-4 col-md-12 col-lg-4">
+          <div class="card" style="width: 16rem;">
+            <a href="{% url 'reviews:movie_detail' movie.pk %}" class="text-decoration-none text-dark">
+              <img src="{{ movie.image.url }}" alt="{{ movie.title }}" class="card-img-top mb-2">
+              <h5 class="card-title mx-3">{{ movie.title }}</h5>
+              <h6 class="card-subtitle mb-2 mx-3 text-muted">
+                {{ movie.opening_date | date:'Y' }}
+                |
+                {{ movie.producer }}
+              </h6>
+            </a>
+            <div class="card-body">
+              <p class="card-text text-truncate">{{ movie.content }}</p>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+  <!-- 영화 -->
+  <div class="container my-3">
+    <div class="row mx-auto">
+      <span class="mb-3">영화</span>
+      {% for movie in movie %}
+        <div class="col-9 col-sm-12 col-md-4 col-md-12 col-lg-4">
+          <div class="card text-center" style="min-width: 10rem;">
+            <a href="{% url 'reviews:movie_detail' movie.pk %}" class="text-decoration-none text-dark">
+              <img src="{{ movie.image.url }}" alt="{{ movie.image }}">
+              <h5>{{ movie.title }}</h5>
+            </a>
+          </div>
+        </div>
+        {% empty %}
+        <div class="row mx-auto">
+          <p>검색 결과가 없습니다.</p>
+        </div>
+      {% endfor %}
+    </div>
   </div>
 </div>
 {% endblock content %}

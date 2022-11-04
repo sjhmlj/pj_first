@@ -1,6 +1,14 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load django_bootstrap5 %}
+{% block css %}
+  <style>
+    body {
+      background-color: rgb(241, 241, 241);
+    }
+  </style>
+{% endblock css %}
+
 {% block content %}
   <div class="d-flex justify-content-end">
     {% if request.user.is_superuser %}
@@ -12,27 +20,32 @@
       </form>
     {% endif %}
   </div>
-  <div class="d-flex my-2 bg-light rounded p-4">
+  <div class="d-flex my-2 bg-white rounded p-4 border">
     <img class='rounded' src="{{ movie.image.url }}" alt="{{ movie.image }}">
     <div class='d-flex flex-column justify-content-center mx-5'>
-      <h2>{{ movie.title }}
+      <h2>
+        <span class='fw-bold'>{{ movie.title }}</span>
         <span class='fs-4 text-secondary'>({{ movie.opening_date.year }})</span>
         <span class='fs-6'>
           <i class="bi bi-star-fill"></i>{{ total.review_avg|floatformat }}
         </span>
       </h2>
       <div class='mt-5 mb-2'>
-        <h5>줄거리</h5>
+        <h5>줄거리 요약</h5>
         <p>{{ movie.content }}</p>
       </div>
       <div class='my-2'>
         <h5>출연/제작</h5>
-        <p>{{ movie.cast }}
-          {{ movie.producer }}</p>
+        <p class='m-0'>감독:
+          {{ movie.producer }}
+        </p>
+        <p>출연진:
+          {{ movie.cast }}
+        </p>
       </div>
     </div>
   </div>
-  <div class='rounded bg-light p-4 mt-4'>
+  <div class='rounded bg-white p-4 mt-4 border'>
     <div class='d-flex justify-content-between mb-3'>
       <h5>{{ reviews.count }}개의 리뷰</h5>
       <div>
@@ -44,7 +57,7 @@
         <div class="col-4 my-2">
           <a class='text-decoration-none text-dark' href="{% url 'reviews:review_detail' review.pk %}">
             <div class="card">
-              <div class="card-header">
+              <div class="card-header d-flex">
                 {% if review.user.profile_image %}
                   <img style='width:1.5rem; hegiht:1.5rem;' class='rounded-circle' src="{{ review.user.profile_image.url }}" alt="{{ review.user.profile_image }}">
                 {% else %}
@@ -53,7 +66,7 @@
                 <span class='mx-1 fw-bold'>{{ review.user.nickname }}</span>
               </div>
               <div class="card-body">
-                <h5 class="card-title m-0">{{ review.title }}</h5>
+                <p class="card-title m-0">{{ review.title }}</p>
               </div>
               <div style='font-size:0.8rem;' class='text-secondary card-footer'>
                 {{ review.created_at }}
