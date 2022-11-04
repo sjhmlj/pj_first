@@ -5,18 +5,22 @@
   <h1>index</h1>
   <!-- 영화 리스트 -->
 
-  <div class="container text-center my-3">
-    <h2 class="font-weight-light">Movies</h2>
+  <div class="container my-3">
+    <h2 class="font-weight-light text-center">Movies</h2>
     <div class="row  justify-content-center">
       <div id="recipeCarousel" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner" role="listbox">
           {% for movie in movies %}
             <div class="carousel-item {% if forloop.counter == 1 %}active{% endif %} ">
               <div class='col-3 p-4 mx-1 my-2'>
-                <div class='card'>
+                <div class='card border-0'>
                   <a href="{% url 'reviews:movie_detail' movie.pk %}"><img class='card-img-top rounded' src="{{ movie.image.url }}" alt="{{ movie.image }}"></a>
-                  <div class='card=body'>
-                    <h5 class='card-title text-center fst-italic'>{{ movie.title }}</h3>
+                  <div class='card-body p-1'>
+                    <h5 class='fst-italic m-0'>{{ movie.title }}
+                      <span style="font-size:1rem;">({{ movie.opening_date.year }})</span></h5>
+                    <p style="font-size:0.8rem;" class='text-secondary'>
+                      평균
+                      <i class="bi bi-star-fill mx-1"></i>{{ movie.all_avg|floatformat }}</p>
                   </div>
                 </div>
               </div>
@@ -32,8 +36,38 @@
         </a>
       </div>
     </div>
-
   </div>
+
+  <div class="container text-center my-3">
+    <h2 class="font-weight-light">평점 높은 영화들</h2>
+    <div class="row  justify-content-center">
+      <div id="recipeCarousel1" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner" role="listbox">
+          {% for movie in rank_movies %}
+            <div class="carousel-item {% if forloop.counter == 1 %}active{% endif %} ">
+              <div class='col-3 p-4 mx-1 my-2'>
+                <div class='card'>
+                  <a href="{% url 'reviews:movie_detail' movie.pk %}"><img class='card-img-top rounded' src="{{ movie.image.url }}" alt="{{ movie.image }}"></a>
+                  <div class='card-body'>
+                    <h5 class='card-title text-center fst-italic'>{{ movie.title }}|{{ movie.all_avg|floatformat }}</h5>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+
+        </div>
+        <a class="carousel-control-prev bg-transparent w-aut" href="#recipeCarousel1" role="button" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        </a>
+        <a class="carousel-control-next bg-transparent w-aut" href="#recipeCarousel1" role="button" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- <div class="container text-center my-3"> <h2 class="font-weight-light">평점 높은 영화들</h2> <div class="row justify-content-center"> <div id="recipeCarousel" class="carousel slide" data-bs-ride="carousel"> <div class="carousel-inner" role="listbox"> {% for movie in rank_movies %} <div class="carousel-item {% if forloop.counter == 1 %}active{% endif %} "> <div class='col-3 p-4 mx-1 my-2'> <div class='card'> <a href="{% url 'reviews:movie_detail' movie.pk %}"><img class='card-img-top rounded' src="{{ movie.image.url }}" alt="{{ movie.image }}"></a> <div class='card-body'> <h5 class='card-title text-center fst-italic'>{{ movie.title }}|{{ movie.all_avg }}</h5> </div> </div> </div> </div> {% endfor %} </div> <a class="carousel-control-prev bg-transparent w-aut" href="#recipeCarousel" role="button" data-bs-slide="prev"> <span class="carousel-control-prev-icon" aria-hidden="true"></span> </a> <a class="carousel-control-next bg-transparent w-aut" href="#recipeCarousel" role="button" data-bs-slide="next"> <span class="carousel-control-next-icon" aria-hidden="true"></span> </a> </div> </div> </div> -->
 
   <style>
     @media (max-width: 767px) {

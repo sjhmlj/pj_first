@@ -8,7 +8,13 @@ class CustomUserCreationForm(UserCreationForm):
         fields = [
             "username",
             "nickname",
+            'profile_image',
         ]
+        labels = {
+            'username': '아이디',
+            'nickname': '닉네임',
+            'profile_image': '프로필 사진(선택)',
+        }
 
 
 class CustomUserChangeForm(UserChangeForm):
@@ -21,3 +27,8 @@ class CustomUserChangeForm(UserChangeForm):
             "email",
             "profile_image",
         ]
+        labels = {
+            'nickname': '닉네임',
+            'email': '이메일',
+            'profile_image': '프로필 사진',
+        }
