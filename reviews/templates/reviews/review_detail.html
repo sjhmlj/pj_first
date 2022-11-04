@@ -12,7 +12,9 @@
 {% block content %}
   <div class='bg-white rounded p-4 border'>
     <div class="d-flex">
-      <a class='border border-dark rounded bg-white' href="{% url 'reviews:movie_detail' review.movie.pk %}"><img style='width:120px; height:160px;' class=' rounded p-1' src="{{ review.movie.image.url }}" alt="{{ review.movie.image }}"></a>
+      <a class='border rounded bg-white' href="{% url 'reviews:movie_detail' review.movie.pk %}">
+        <img style='width:120px; height:160px; padding:0.1rem;' class='rounded' src="{{ review.movie.image.url }}" alt="{{ review.movie.image }}">
+      </a>
       <div class='w-100 ms-3'>
         <h2>{{ review.title }}
         </h2>
@@ -33,10 +35,40 @@
                 {{ review.user }}</a>
             </p>
           </div>
-          <div class='d-flex flex-column align-items-end justify-content-start'>
+          <div class='d-flex flex-column align-items-end justify-content-between'>
             <span style='font-size:0.9rem;' class='text-secondary'>{{ review.created_at }}</span>
             {% if review.created_at != review.updated_at %}
               <span style='font-size:0.9rem;' class='text-secondary'>(수정){{ review.updated_at }}</span>
+            {% endif %}
+            {% if review.user == request.user %}
+              <div class='d-flex justify-content-end'>
+                <a class='btn btn-outline-dark btn-sm' href="{% url 'reviews:review_update' review.pk %}">수정</a>
+                <!-- Button trigger modal -->
+                <button type="button" class="ms-2 btn btn-outline-dark btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                  삭제
+                </button>
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">정말 삭제하시겠습니까?</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        삭제된 게시글은 복구할 수 없으며 관련된 댓글 또한 삭제됩니다.
+                      </div>
+                      <div class="modal-footer">
+                        <form class='mx-2' action="{% url 'reviews:review_delete' review.movie.pk review.pk %}">
+                          {% csrf_token %}
+                          <input class='btn btn-outline-danger ' type="submit" value='삭제'>
+                        </form>
+                        <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">아니오</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             {% endif %}
           </div>
         </div>
@@ -53,36 +85,6 @@
           {% endif %}
         </div>
       </div>
-      {% if review.user == request.user %}
-        <div class='d-flex justify-content-end'>
-          <a class='btn btn-outline-dark btn-sm' href="{% url 'reviews:review_update' review.pk %}">수정</a>
-          <!-- Button trigger modal -->
-          <button type="button" class="mx-2 btn btn-outline-dark btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal">
-            삭제
-          </button>
-          <!-- Modal -->
-          <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h1 class="modal-title fs-5" id="exampleModalLabel">정말 삭제하시겠습니까?</h1>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                  삭제된 게시글은 복구할 수 없으며 관련된 댓글 또한 삭제됩니다.
-                </div>
-                <div class="modal-footer">
-                  <form class='mx-2' action="{% url 'reviews:review_delete' review.movie.pk review.pk %}">
-                    {% csrf_token %}
-                    <input class='btn btn-outline-danger ' type="submit" value='삭제'>
-                  </form>
-                  <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">아니오</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      {% endif %}
     {% endif %}
     <p style='font-size:0.8rem;' class='text-secondary my-1'>좋아요
       <span style='font-size:0.8rem;' id="like-count" class="text-center me-3">{{ review.like_users.count }}</span>
