@@ -1,11 +1,21 @@
 {% extends 'base.html' %}
+{% block css %}
+  <style>
+    .review-div {
+      position: relative;
+      left: 30%;
+
+    }
+  </style>
+{% endblock css %}
 
 {% block content %}
-  <h1>
+  <h1 class="text-center mb-5">
     {{user.nickname}}님의 리뷰
   </h1>
   {% for review in reviews %}
-    <div class="m-3 d-flex">
+
+    <div class="review-div m-3 d-flex">
       <!-- 영화 포스터 클릭하면 해당 리뷰로 이동 -->
       <a href="{% url 'reviews:review_detail' review.pk %}">
         <img src="{{review.movie.image.url}}" alt="" style="width:5rem;" class="rounded">
@@ -24,4 +34,5 @@
       </div>
     </div>
   {% endfor %}
+</div>
 {% endblock content %}
