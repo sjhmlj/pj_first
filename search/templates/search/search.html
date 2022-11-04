@@ -8,15 +8,19 @@
     <b>"{{ query }}"</b>의 검색결과</span>
 </div>
 <!-- 탭 -->
-<div class="container">
+<div class="container" link="black" vlink="black" alink="black">
   <ul class="nav nav-tabs" style="display: flex; box-sizing: border-box;">
     <li class="nav-item">
-      <a href="#movie" data-toggle="tab" aria-current="page" class="nav-link">영화</a>
+      <a href="#movie" data-toggle="tab" aria-current="page" class="nav-link" style="color: black;">
+        영화
+      </a>
     </li>
     <li class="nav-item">
-      <a href="#review" data-toggle="tab" class="nav-link">리뷰</a>
+      <a href="#review" data-toggle="tab" class="nav-link" style="color: black;">리뷰</a>
     </li>
-    <li><a href="#user" data-toggle="tab" class="nav-link">유저</a></li>
+    <li class="nav-item">
+      <a href="#user" data-toggle="tab" class="nav-link" style="color: black;">유저</a>
+    </li>
   </ul>
 </div>
 
@@ -139,21 +143,7 @@
   </div>
 </div>
 <style>
-  a:link {
-    color: black;
-  }
 
-  a:visited {
-    color: black;
-  }
-
-  a:hover {
-    color: black;
-  }
-
-  a:active {
-    color: black;
-  }
 </style>
 <script>
   $(function () {
