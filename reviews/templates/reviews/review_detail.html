@@ -31,7 +31,7 @@
               {% endfor %}
             </div>
             <p>작성자:
-              <a href="{% url 'accounts:detail' review.user.pk %}">
+              <a class='text-dark' href="{% url 'accounts:detail' review.user.pk %}">
                 {{ review.user }}</a>
             </p>
           </div>
