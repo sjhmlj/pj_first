@@ -10,38 +10,96 @@
 {% endblock css %}
 
 {% block content %}
-  <div class="d-flex justify-content-end">
-    {% if request.user.is_superuser %}
-      <!-- 로그인한 사람이 관리자이면 수정 버튼 생성 -->
-      <a class='btn btn-outline-dark btn-sm' href="{% url 'reviews:movie_update' movie.pk %}">수정</a>
-      <form class='mx-2' action="{% url 'reviews:movie_delete' movie.pk %}" method="POST">
-        {% csrf_token %}
-        <input class='btn btn-outline-dark btn-sm' type="submit" value='삭제'>
-      </form>
-    {% endif %}
-  </div>
-  <div class="d-flex my-2 bg-white rounded p-4 border">
-    <img class='rounded' src="{{ movie.image.url }}" alt="{{ movie.image }}">
+
+  <div class="d-flex align-items-center my-2 bg-white rounded p-4 border">
+    <img style='width:300px; height:400px;' class='rounded' src="{{ movie.image.url }}" alt="{{ movie.image }}">
     <div class='d-flex flex-column justify-content-center mx-5'>
-      <h2>
-        <span class='fw-bold'>{{ movie.title }}</span>
-        <span class='fs-4 text-secondary'>({{ movie.opening_date.year }})</span>
-        <span class='fs-6'>
-          <i class="bi bi-star-fill"></i>{{ total.review_avg|floatformat }}
+      <div class='d-flex justify-content-between mb-1'>
+        <div class='d-flex align-items-end'>
+          <h2 class='fw-bold m-0'>{{ movie.title }}</h2>
+          <span class='fs-4 text-secondary mx-1'>({{ movie.opening_date.year }})</span>
+          <span class='fs-6'>
+            <i class="bi bi-star-fill mx-1"></i>{{ total.review_avg|floatformat }}
+          </span>
+        </div>
+      </div>
+      <div class='my-1'>
+        <span class='fw-bold'>{{ movie.opening_date.year }}/{{ movie.opening_date.month }}/{{ movie.opening_date.day }}
         </span>
-      </h2>
-      <div class='mt-5 mb-2'>
-        <h5>줄거리 요약</h5>
+        <span class='fw-bold'>
+          {% if movie.running_time %}
+            •
+            {{ movie.running_time }}분
+          {% endif %}
+        </span>
+        <button type="button" class="btn btn-outline-danger btn-sm mx-2 p-1" data-bs-toggle="modal" data-bs-target="#youtube" onclick="LoadVideo()">
+          <i class="bi bi-play-fill "></i>
+          예고편
+        </button>
+        {% if request.user.is_superuser %}
+          <!-- 로그인한 사람이 관리자이면 수정 버튼 생성 -->
+          <span class='float-end'>
+            <div class="d-flex">
+              <a class='btn btn-outline-dark btn-sm' href="{% url 'reviews:movie_update' movie.pk %}">수정</a>
+              <!-- Button trigger modal -->
+              <button type="button" class="btn btn-outline-dark btn-sm ms-2" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                삭제
+              </button>
+              <!-- Modal -->
+              <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h1 class="modal-title fs-5 fw-bold" id="exampleModalLabel">{{ movie.title }}</h1>
+                    </div>
+                    <div class="modal-body">
+                      이 영화와 관련된 모든 것이 삭제됩니다. 삭제하시겠습니까?
+                    </div>
+                    <div class="modal-footer">
+                      <form class='mx-2' action="{% url 'reviews:movie_delete' movie.pk %}" method="POST">
+                        {% csrf_token %}
+                        <input class='btn btn-outline-danger btn-sm' type="submit" value='삭제'>
+                      </form>
+                      <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">아니오</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </span>
+        {% endif %}
+      </div>
+      <div class='mt-3 mb-2'>
+        <h5 class='fw-bold'>줄거리 요약</h5>
         <p>{{ movie.content }}</p>
       </div>
       <div class='my-2'>
-        <h5>출연/제작</h5>
+        <h5 class='fw-bold'>출연/제작</h5>
         <p class='m-0'>감독:
           {{ movie.producer }}
         </p>
         <p>출연진:
           {{ movie.cast }}
         </p>
+      </div>
+      <!-- Button trigger modal -->
+
+      <!-- Modal -->
+      <div class="modal fade" id="youtube" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+          <div class="modal-content">
+            <div class="modal-body d-flex flex-column bg-black">
+              <div class="d-flex justify-content-between mx-2 mb-2">
+                <span class="fw-bold text-light">{{ movie.title }}
+                  예고편</span>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close" onclick="deleteVideo()"></button>
+              </div>
+              <div class="ratio ratio-16x9 me-5" style="width: 100%;">
+                <iframe id="VideoPlayer" data-trailer-id="{{ movie.trailer_url }}" width="560" height="315" src="" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="allowfullscreen"></iframe>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -86,3 +144,17 @@
     </div>
   </div>
 {% endblock content %}
+{% block script %}
+  <script type="text/javascript">
+    function deleteVideo() {
+      document
+        .querySelector('#VideoPlayer')
+        .src = '';
+    }
+
+    function LoadVideo() {
+      const videoPlayer = document.querySelector('#VideoPlayer')
+      videoPlayer.src = videoPlayer.dataset.trailerId
+    }
+  </script>
+{% endblock script %}

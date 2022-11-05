@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .forms import CustomUserChangeForm, CustomUserCreationForm
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.contrib.auth import login as auth_login
-from django.contrib.auth import logout as auth_logout
+from django.contrib.auth import logout as auth_logout, authenticate
 from .models import User
 from django.contrib.auth import get_user_model, update_session_auth_hash
 from django.contrib import messages
@@ -11,7 +11,6 @@ from reviews.models import Review
 from django.views.decorators.http import require_POST
 from django.http import JsonResponse
 from reviews.models import Review, Movie
-
 
 def signup(request):
     if request.method == "POST":
@@ -30,26 +29,28 @@ def signup(request):
     }
     return render(request, "accounts/signup.html", context)
 
-
 def login(request):
     if request.method == "POST":
-        form = AuthenticationForm(request, data=request.POST)
-        if form.is_valid():
-            auth_login(request, form.get_user())
-            return redirect(request.GET.get("next") or "reviews:index")
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            auth_login(request, user)
+        else:
+            messages.warning(request, '아이디 또는 비밀번호가 틀렸습니다.')
+        return redirect(request.GET.get('next') or 'reviews:index')
     else:
         form = AuthenticationForm()
-    context = {
-        "form": form,
-    }
-    return render(request, "accounts/login.html", context)
-
+        context = {
+            'form':form,
+            }
+        return render(request, 'accounts/login.html', context)
 
 def logout(request):
     auth_logout(request)
     return redirect("reviews:index")
 
-
+@login_required
 def detail(request, pk):
     user = get_object_or_404(get_user_model(), pk=pk)
     followers_number = user.followers.count()
@@ -63,18 +64,13 @@ def detail(request, pk):
     }
     return render(request, "accounts/detail.html", context)
 
-
 @login_required
 def profile_update(request):
-
     if request.method == "POST":
-
         form = CustomUserChangeForm(request.POST, request.FILES, instance=request.user)
-
         if form.is_valid():
             form.save()
             return redirect("accounts:detail", request.user.pk)
-
     else:
         form = CustomUserChangeForm(instance=request.user)
     context = {
@@ -82,10 +78,8 @@ def profile_update(request):
     }
     return render(request, "accounts/update.html", context)
 
-
 @login_required
 def password_update(request):
-
     if request.method == "POST":
         form = PasswordChangeForm(request.user, request.POST)
         if form.is_valid():
@@ -111,7 +105,6 @@ def delete(request):
         return render(request, "reviews:index")
     return redirect("reviews:index")
 
-
 @login_required
 def follow(request, pk):
     user = get_object_or_404(get_user_model(), id=pk)
@@ -129,7 +122,7 @@ def follow(request, pk):
         }
         return JsonResponse(context)
 
-
+@login_required
 def reviews(request, pk):
     user = get_object_or_404(get_user_model(), id=pk)
     reviews = Review.objects.filter(user=user)
@@ -139,7 +132,7 @@ def reviews(request, pk):
     }
     return render(request, "accounts/reviews.html", context)
 
-
+@login_required
 def showfollow(request, pk):
     user = get_object_or_404(get_user_model(), id=pk)
     followers = user.followers.all()
