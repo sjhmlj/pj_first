@@ -1,6 +1,9 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+{% load static %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light p-0">
   <div class="container-fluid mx-5 d-flex">
-    <a class="navbar-brand" href="{% url 'reviews:index' %}" style="color: red; font-size: 25px; font-weight: bold;">EutCha!</a>
+    <a class="navbar-brand" href="{% url 'reviews:index' %}">
+      <img style='height:2.5rem;' src="{% static '/images/profile_images/Eutcha_logo.png' %}" alt="Eutcha logo">
+    </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -8,22 +11,37 @@
       <ul class="nav navbar-nav">
         {% if request.user.is_authenticated %}
           <li class="nav-item">
-            <a class="nav-link me-2" href="{% url 'accounts:detail' request.user.pk %}">{{ request.user.nickname }}</a>
+            <a class="nav-link me-2" href="{% url 'accounts:detail' request.user.pk %}">
+              <div class='d-flex align-items-center'>
+                {% if request.user.profile_image %}
+                  <img class='rounded-circle border border-dark' style='width:1.4rem; height:1.4rem;' src="{{ request.user.profile_image.url }}" alt="{{ request.user.profile_image }}">
+                {% else %}
+                  <img class='rounded-circle border border-dark' style='width:1.4rem; height:1.4rem;' src="{% static '/images/profile_images/no-avatar.png' %}" alt="no-avatar">
+                {% endif %}
+                <span class='ms-1 fs-6 fw-bold'>
+                  {% if request.user.nickname %}
+                    {{ request.user.nickname }}
+                  {% else %}
+                    {{ request.user.username }}
+                  {% endif %}
+                </span>
+              </div>
+            </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link me-2" href="{% url 'accounts:logout' %}">로그아웃</a>
+            <a class="nav-link me-2 fs-6 fw-bold" href="{% url 'accounts:logout' %}">로그아웃</a>
           </li>
           {% if request.user.is_superuser %}
             <li class="nav-item">
-              <a class="nav-link me-2" href="{% url 'reviews:movie_create' %}">영화등록</a>
+              <a class="nav-link me-2 fs-6 fw-bold" href="{% url 'reviews:movie_create' %}">영화등록</a>
             </li>
           {% endif %}
         {% else %}
           <li class="nav-item">
-            <a class="nav-link me-2" href="{% url 'accounts:signup' %}">회원가입</a>
+            <a class="nav-link me-2 fs-6 fw-bold" href="{% url 'accounts:signup' %}">회원가입</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo" href="#">로그인</a>
+            <a class="nav-link fs-6 fw-bold" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo" href="#">로그인</a>
             <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
               <div class="modal-dialog">
                 <div class="modal-content">
@@ -38,8 +56,8 @@
                       <label class="col-form-label" for="password">비밀번호</label>
                       <input type="password" class='form-control' name='password' id='password'>
                       <div class='d-flex justify-content-end mt-3'>
-                        <input type="submit" class="btn btn-secondary" value='로그인'>
-                        <button type="button" class="btn btn-secondary ms-2" data-bs-dismiss="modal">닫기</button>
+                        <input type="submit" class="btn btn-secondary btn-sm" value='로그인'>
+                        <button type="button" class="btn btn-secondary ms-2 btn-sm" data-bs-dismiss="modal">닫기</button>
                       </div>
                     </form>
                   </div>
@@ -53,8 +71,10 @@
         <li class="search_bar">
           <form class="d-flex" action="{% url 'search:searchResult' %}" method="get">
             {% csrf_token %}
-            <input class="form-control mx-3" type="search" placeholder="Search" aria-label="Search" name="q">
-            <button class="btn btn-outline-dark me-2" type="submit">Search</button>
+            <input class="form-control form-form-control-sm mx-3" type="search" placeholder="Search" aria-label="Search" name="q">
+            <button class="btn btn-outline-dark me-2" type="submit">
+              <i class="bi bi-search"></i>
+            </button>
           </form>
         </li>
       </ul>

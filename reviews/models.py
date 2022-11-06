@@ -1,6 +1,6 @@
 from django.db import models
 from imagekit.models import ProcessedImageField
-from imagekit.processors import Thumbnail, ResizeToFit
+from imagekit.processors import ResizeToFit
 from django.contrib.auth import get_user_model
 from django.core.validators import MinValueValidator, MaxValueValidator
 
@@ -9,12 +9,13 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 class Movie(models.Model):
     title = models.CharField(max_length=50)
     content = models.TextField()
-    running_time = models.IntegerField(blank=True)
+    running_time = models.IntegerField(blank=True, default=0)
     cast = models.TextField()
     producer = models.CharField(max_length=20)
     opening_date = models.DateField()
-    trailer_url = models.CharField(blank=True, max_length=100, default='https://www.youtube.com/embed/')
+    trailer_url = models.CharField(blank=True, max_length=100)
     image = ProcessedImageField(blank=False, upload_to='images/', processors=[ResizeToFit(300, 400)], format='JPEG', options={'quality':80})
+    like_users = models.ManyToManyField(get_user_model(), related_name='like_movies')
 
 class Review(models.Model):
     title = models.CharField(max_length=20)

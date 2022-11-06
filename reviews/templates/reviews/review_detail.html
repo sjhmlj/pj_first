@@ -89,7 +89,7 @@
     <p style='font-size:0.8rem;' class='text-secondary my-1'>좋아요
       <span style='font-size:0.8rem;' id="like-count" class="text-center me-3">{{ review.like_users.count }}</span>
       댓글
-      {{ comments.count }}
+      <span id='comment-count'>{{ comments.count }}</span>
     </p>
     <form id='comment-form' data-review-id="{{ review.id }}">
       {% csrf_token %}
@@ -248,8 +248,12 @@
             p1.innerText = comment[0]
             comments.append(div1, p1, hr)
           }
-          comments.removeChild(hr)
-          commentForm.reset()
+          const commentCount = document.querySelector('#comment-count')
+          commentCount.innerText = response
+            .data
+            .commentCount
+            commentForm
+            .reset()
         })
       })
   </script>

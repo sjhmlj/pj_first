@@ -171,10 +171,11 @@ def comment_create(request, review_pk):
                     a.review.id, 
                     is_liked, 
                     comment_like_user, 
-                    islogin
+                    islogin,
                     ])
             context = {
-                'comments':comments
+                'comments':comments,
+                'commentCount':review.comment_set.count()
             }
             return JsonResponse(context)
 
@@ -207,3 +208,18 @@ def comment_like(request, comment_pk):
     else:
         comment.like_users.add(request.user)
     return redirect('reviews:review_detail', comment.review.pk)
+
+def movie_like(request, movie_pk):
+    if request.user.is_authenticated:
+        movie = get_object_or_404(Movie, pk=movie_pk)
+        if movie.like_users.filter(pk=request.user.pk).exists():
+            movie.like_users.remove(request.user)
+            isLiked = False
+        else:
+            movie.like_users.add(request.user)
+            isLiked = True
+        context = {
+            'isLiked':isLiked,
+            'likeCount':movie.like_users.count(),
+        }
+        return JsonResponse(context)
