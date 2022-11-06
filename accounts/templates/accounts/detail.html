@@ -11,6 +11,7 @@
 {% endblock css %}
 {% block content %}
   <div class='row mt-5'>
+
     <!-- 내 프로필 사이드 배너 -->
     {% if user == request.user %}
       <div class='col-3 px-3 pt-3'>
@@ -55,7 +56,6 @@
               </div>
             </div>
           </li>
-
         </ul>
         <h3 class="mt-5 text-bg-primary p-3 text-center rounded">
           모음
@@ -66,6 +66,7 @@
           </li>
         </ul>
       </div>
+
     {% else %}
       <!-- 다른사람 프로필의 사이드 배너-->
       <div class='col-3 px-3 pt-3'>
@@ -73,7 +74,6 @@
           <a href="{% url 'accounts:detail' user.pk %}" style="text-decoration:none; color:white;">{{user.nickname}}님의 프로필</a>
         </h3>
         <ul class='list-group'>
-
           {% csrf_token %}
           <form id="follow-form" data-user-id="{{ user.pk }}">
             {% if request.user in user.followers.all %}
@@ -82,9 +82,7 @@
               <input type="submit" value="팔로우" class='pt-2 list-group-item w-100 text-center'>
             {% endif %}
           </form>
-
         </ul>
-
         <h3 class="mt-5 text-bg-primary p-3 text-center rounded">
           모음
         </h3>
@@ -95,20 +93,20 @@
         </ul>
       </div>
     {% endif %}
+
     <!-- 프로필 -->
-    <div class='col-9 rounded px-4'>
-      <div class="mt-4">
-
-        <div class='d-flex'>
-
+    <div class='col-9 px-4'>
+      <div class="container">
+        <div class="my-4 d-flex">
           {% if user.profile_image %}
             <img src="{{ user.profile_image.url }}" alt="{{ user.profile_image }}" class="rounded-circle border border-light">
           {% else %}
             <img src="{% static '/images/profile_images/no-avatar.png' %}" alt="no-avatar" class="rounded-circle border border-light">
           {% endif %}
           <div class='px-5 pt-3'>
-            <h4>
-              {{user.nickname}}님
+            <h4 class='fw-bold'>
+              {{user.nickname}}
+              님
             </h4>
             {% if user.email %}
               <div>{{user.email}}</div>
@@ -126,9 +124,22 @@
                 <a href="{% url 'accounts:reviews' user.pk %}">
                   작성한 리뷰 수:
                   {{reviews_number}}</a>
-
               </div>
             </div>
+          </div>
+        </div>
+        <div>
+          <h4>추천한 영화</h4>
+          <div class="row">
+            {% for movie in user.like_movies.all %}
+              <div class="col-2 my-2">
+                <div class='d-flex justify-content-center w-100 h-100'>
+                  <a href="{% url 'reviews:movie_detail' movie.pk %}">
+                    <img class='w-100 h-100 rounded' src=" {{ movie.image.url }}" alt="{{ movie.image }}">
+                  </a>
+                </div>
+              </div>
+            {% endfor %}
           </div>
         </div>
       </div>
