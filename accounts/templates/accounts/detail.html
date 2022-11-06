@@ -171,7 +171,11 @@
             const followings = document.querySelector('#followings')
             const followers = document.querySelector('#followers')
             followings.innerText = response.data.followings_count
-            followers.innerText = response.data.followers_count
+            followers.innerText = response
+              .data
+              .followers_count
+              console
+              .log(response.data) // {is_followed: true, followings_count: 1, followers_count: 1}
           })
           .catch((error) => {
             console.log(error.response)
