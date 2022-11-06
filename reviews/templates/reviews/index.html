@@ -1,6 +1,45 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load django_bootstrap5 %}
+{% block css %}
+  <style>
+    @media (max-width: 767px) {
+      .carousel-inner .carousel-item > div {
+        display: none;
+      }
+
+      .carousel-inner .carousel-item > div:first-child {
+        display: block;
+      }
+    }
+
+    .carousel-inner .carousel-item-next,
+    .carousel-inner .carousel-item-prev,
+    .carousel-inner .carousel-item.active {
+      display: flex;
+    }
+
+    /* medium and up screens */
+    @media (min-width: 768px) {
+
+      .carousel-inner .carousel-item-end.active,
+      .carousel-inner .carousel-item-next {
+        transform: translateX(25%);
+      }
+
+      .carousel-inner .carousel-item-prev,
+      .carousel-inner .carousel-item-start.active {
+        transform: translateX(-25%);
+      }
+    }
+
+    .carousel-inner .carousel-item-end,
+    .carousel-inner .carousel-item-start {
+      transform: translateX(0);
+    }
+  </style>
+{% endblock css %}
+
 {% block content %}
   <!-- 영화 리스트 -->
 
@@ -79,47 +118,20 @@
       </div>
     </div>
   </div>
+  <h4 class='fw-bold'>모든 영화</h4>
+  <hr>
+  <div class='row overflow-auto'>
+    {% for movie in movies %}
+      <div class='col-2 text-center mb-3'>
+        <a href="{% url 'reviews:movie_detail' movie.pk %}"><img style='width:100%;' class='h-100 rounded' src="{{ movie.image.url }}" alt="{{ movie.image }}"></a>
+      </div>
+    {% endfor %}
+  </div>
+{% endblock content %}
 
-  <style>
-    @media (max-width: 767px) {
-      .carousel-inner .carousel-item > div {
-        display: none;
-      }
-
-      .carousel-inner .carousel-item > div:first-child {
-        display: block;
-      }
-    }
-
-    .carousel-inner .carousel-item-next,
-    .carousel-inner .carousel-item-prev,
-    .carousel-inner .carousel-item.active {
-      display: flex;
-    }
-
-    /* medium and up screens */
-    @media (min-width: 768px) {
-
-      .carousel-inner .carousel-item-end.active,
-      .carousel-inner .carousel-item-next {
-        transform: translateX(25%);
-      }
-
-      .carousel-inner .carousel-item-prev,
-      .carousel-inner .carousel-item-start.active {
-        transform: translateX(-25%);
-      }
-    }
-
-    .carousel-inner .carousel-item-end,
-    .carousel-inner .carousel-item-start {
-      transform: translateX(0);
-    }
-  </style>
-
+{% block script %}
   <script>
     let items = document.querySelectorAll('.carousel .carousel-item')
-
     items.forEach((el) => {
       const minPerSlide = 4
       let next = el.nextElementSibling
@@ -134,4 +146,4 @@
       }
     })
   </script>
-{% endblock content %}
+{% endblock script %}
