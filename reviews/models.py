@@ -7,11 +7,13 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 
 # Create your models here.
 class Movie(models.Model):
-    title = models.CharField(max_length=20)
+    title = models.CharField(max_length=50)
     content = models.TextField()
+    running_time = models.IntegerField(blank=True)
     cast = models.TextField()
     producer = models.CharField(max_length=20)
     opening_date = models.DateField()
+    trailer_url = models.CharField(blank=True, max_length=100, default='https://www.youtube.com/embed/')
     image = ProcessedImageField(blank=False, upload_to='images/', processors=[ResizeToFit(300, 400)], format='JPEG', options={'quality':80})
 
 class Review(models.Model):

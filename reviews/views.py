@@ -10,9 +10,9 @@ from django.db.models import Avg, Count
 def index(request):
     movies = Movie.objects.annotate(all_avg=Avg('review__grade'))
     rank_movies = movies.order_by('-all_avg')
-
+    recent_movies = movies.order_by('-opening_date')
     context = {
-        'movies': movies,
+        'movies': recent_movies,
         'rank_movies' : rank_movies,
         
     }
@@ -74,7 +74,6 @@ def movie_delete(request, movie_pk):
         movie.delete()
         return redirect('reviews:index')
             
-
 @login_required
 def review_create(request, movie_pk):
     movie = get_object_or_404(Movie, pk=movie_pk)
@@ -144,7 +143,7 @@ def review_delete(request, movie_pk, review_pk):
 @login_required
 def comment_create(request, review_pk):
     review = get_object_or_404(Review, pk=review_pk)
-    if request.method == "POST":
+    if request.method == "POST" :
         comment_form = CommentForm(request.POST)
         if comment_form.is_valid():
             form = comment_form.save(commit=False)

@@ -23,7 +23,29 @@
             <a class="nav-link me-2" href="{% url 'accounts:signup' %}">회원가입</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'accounts:login' %}">로그인</a>
+            <a class="nav-link" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo" href="#">로그인</a>
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">로그인</h5>
+                  </div>
+                  <div class="modal-body">
+                    <form action="{% url 'accounts:login' %}" method="POST">
+                      {% csrf_token %}
+                      <label class="col-form-label" for="username">아이디</label>
+                      <input type="text" class='form-control' name='username' id="username">
+                      <label class="col-form-label" for="password">비밀번호</label>
+                      <input type="password" class='form-control' name='password' id='password'>
+                      <div class='d-flex justify-content-end mt-3'>
+                        <input type="submit" class="btn btn-secondary" value='로그인'>
+                        <button type="button" class="btn btn-secondary ms-2" data-bs-dismiss="modal">닫기</button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
           </li>
         {% endif %}
       </ul>
