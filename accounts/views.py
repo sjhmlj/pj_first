@@ -93,6 +93,7 @@ def password_update(request):
     }
     return render(request, "accounts/update.html", context)
 
+
 @login_required
 @require_POST
 def delete(request):
@@ -142,3 +143,20 @@ def showfollow(request, pk):
         "followings": followings,
     }
     return render(request, "accounts/show_follow.html", context)
+
+
+from django.core import serializers
+from django.http import HttpResponse
+
+
+def showfollowjs(request, pk):
+    user = get_object_or_404(get_user_model(), id=pk)
+    followers = user.followers.all()
+    followings = user.followings.all()
+    context = {
+        "followers": followers,
+        "followings": followings,
+    }
+    qs_json = serializers.serialize("json", qs)
+    print(JsonResponse(context))
+    return HttpResponse
