@@ -118,14 +118,16 @@
         <section class="card_list">
           {% for user in user %}
           <div class="me-3 mb-3">
-            <div class="card" style="width: 13rem;">
+            <div class="card" style="width: 10rem;">
               <a href="{% url 'accounts:detail' user.pk %}" class="text-decoration-none text-dark">
                 {% if user.profile_image %}
-                <img src="{{ user.profile_image.url }}" alt="{{ user.profile_image }}" class="card-img-top mb-2 rounded"
-                  style="height: 15rem; width: 13rem;">
+                <img src="{{ user.profile_image.url }}" alt="{{ user.profile_image }}"
+                  class="card-img-top mb-2 rounded-circle mt-1"
+                  style="height: 8rem; width: 8rem; display: block; margin: auto;">
                 {% else %}
-                <img src="{% static '/images/profile_images/no-avatar.png' %}" alt="no-avatar" class="card-img-top mb-2"
-                  style="height: 15rem; width: 13rem">
+                <img src="{% static '/images/profile_images/no-avatar.png' %}" alt="no-avatar"
+                  class="card-img-top mb-2 rounded-circle mt-1"
+                  style="height: 8rem; width: 8rem; display: block; margin: auto;">
                 {% endif %}
                 <h5 class="card-title mx-3">{{ user.username }}</h5>
                 <h6 class="card-subtitle text-muted mx-3">{{ user.nickname }}</h6>
