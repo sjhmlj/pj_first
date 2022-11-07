@@ -3,21 +3,6 @@ html {
   width: 100%;
 }
 
-.btn_top {
-  position: fixed;
-  bottom: 50px;
-  right: 50px;
-  width: 50px;
-  height: 50px;
-  visibility: hidden;
-  color: aliceblue;
-  text-align: center;
-  background-color: black;
-  border-radius: 100%;
-  display: none;
-  z-index: 999;
-}
-
 .heart-button {
   border: 0;
   outline: 0;
