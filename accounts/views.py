@@ -12,6 +12,7 @@ from django.views.decorators.http import require_POST
 from django.http import JsonResponse
 from reviews.models import Review, Movie
 
+
 def signup(request):
     if request.method == "POST":
         form = CustomUserCreationForm(request.POST, request.FILES)
@@ -29,26 +30,29 @@ def signup(request):
     }
     return render(request, "accounts/signup.html", context)
 
+
 def login(request):
     if request.method == "POST":
-        username = request.POST.get('username')
-        password = request.POST.get('password')
+        username = request.POST.get("username")
+        password = request.POST.get("password")
         user = authenticate(request, username=username, password=password)
         if user is not None:
             auth_login(request, user)
         else:
-            messages.warning(request, '아이디 또는 비밀번호가 틀렸습니다.')
-        return redirect(request.GET.get('next') or 'reviews:index')
+            messages.warning(request, "아이디 또는 비밀번호가 틀렸습니다.")
+        return redirect(request.GET.get("next") or "reviews:index")
     else:
         form = AuthenticationForm()
         context = {
-            'form':form,
-            }
-        return render(request, 'accounts/login.html', context)
+            "form": form,
+        }
+        return render(request, "accounts/login.html", context)
+
 
 def logout(request):
     auth_logout(request)
     return redirect("reviews:index")
+
 
 @login_required
 def detail(request, pk):
@@ -64,6 +68,7 @@ def detail(request, pk):
     }
     return render(request, "accounts/detail.html", context)
 
+
 @login_required
 def profile_update(request):
     if request.method == "POST":
@@ -77,6 +82,7 @@ def profile_update(request):
         "form": form,
     }
     return render(request, "accounts/update.html", context)
+
 
 @login_required
 def password_update(request):
@@ -106,6 +112,7 @@ def delete(request):
         return render(request, "reviews:index")
     return redirect("reviews:index")
 
+
 @login_required
 def follow(request, pk):
     user = get_object_or_404(get_user_model(), id=pk)
@@ -123,6 +130,7 @@ def follow(request, pk):
         }
         return JsonResponse(context)
 
+
 @login_required
 def reviews(request, pk):
     user = get_object_or_404(get_user_model(), id=pk)
@@ -132,6 +140,7 @@ def reviews(request, pk):
         "user": user,
     }
     return render(request, "accounts/reviews.html", context)
+
 
 @login_required
 def showfollow(request, pk):
@@ -143,20 +152,3 @@ def showfollow(request, pk):
         "followings": followings,
     }
     return render(request, "accounts/show_follow.html", context)
-
-
-from django.core import serializers
-from django.http import HttpResponse
-
-
-def showfollowjs(request, pk):
-    user = get_object_or_404(get_user_model(), id=pk)
-    followers = user.followers.all()
-    followings = user.followings.all()
-    context = {
-        "followers": followers,
-        "followings": followings,
-    }
-    qs_json = serializers.serialize("json", qs)
-    print(JsonResponse(context))
-    return HttpResponse
