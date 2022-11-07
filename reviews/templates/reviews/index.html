@@ -120,10 +120,10 @@
   </div>
   <h4 class='fw-bold'>모든 영화</h4>
   <hr>
-  <div class='row overflow-auto'>
+  <div class='row'>
     {% for movie in movies %}
       <div class='col-2 text-center mb-3'>
-        <a href="{% url 'reviews:movie_detail' movie.pk %}"><img style='width:100%;' class='h-100 rounded' src="{{ movie.image.url }}" alt="{{ movie.image }}"></a>
+        <a href="{% url 'reviews:movie_detail' movie.pk %}"><img class='w-100 h-100 rounded' src="{{ movie.image.url }}" alt="{{ movie.image }}"></a>
       </div>
     {% endfor %}
   </div>
