@@ -172,6 +172,7 @@ def comment_create(request, review_pk):
                     is_liked, 
                     comment_like_user, 
                     islogin,
+                    a.user.profile_image.url,
                     ])
             context = {
                 'comments':comments,

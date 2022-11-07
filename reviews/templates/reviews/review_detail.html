@@ -105,6 +105,7 @@
     <div id='comments'>
       {% for comment in comments %}
         <div class='d-flex align-items-end'>
+          <img style="width:1.5rem;" class='rounded-circle me-1' src="{{ comment.user.profile_image.url }}" alt="{{ comment.user.profile_image }}">
           <a href="{% url 'accounts:detail' comment.user.pk %}" class='my-0 text-decoration-none text-dark'>{{ comment.user.nickname }}</a>
           <span style='font-size:0.7rem;' class='text-secondary mx-2'>{{ comment.created_at }}</span>
           {% if request.user.is_authenticated %}
@@ -175,11 +176,18 @@
           comments.replaceChildren()
           for (comment of response.data.comments) {
             const hr = document.createElement('hr')
-
             const div1 = document.createElement('div')
             div1
               .classList
               .add('d-flex', 'align-items-end')
+
+            const img1 = document.createElement('img')
+            img1
+              .classList
+              .add('rounded-circle', 'me-1')
+            img1.setAttribute('src', `${comment[10]}`)
+            img1.setAttribute('style', 'width:1.5rem;')
+            img1.setAttribute('alt', `${comment[10]}`)
 
             const a1 = document.createElement('a')
             a1.setAttribute('href', `/accounts/detail/${comment[3]}/`)
@@ -187,7 +195,7 @@
               .classList
               .add('text-decoration-none', 'my-0', 'text-dark')
             a1.innerText = comment[1]
-            div1.append(a1)
+            div1.append(img1, a1)
 
             const span1 = document.createElement('span')
             span1
