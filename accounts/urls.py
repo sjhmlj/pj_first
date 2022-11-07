@@ -14,5 +14,4 @@ urlpatterns = [
     path("follow/<int:pk>/", views.follow, name="follow"),
     path("<int:pk>/reviews/", views.reviews, name="reviews"),
     path("<int:pk>/showfollow/", views.showfollow, name="showfollow"),
-    path("<int:pk>/showfollow/js", views.showfollowjs, name="showfollowjs"),
 ]
